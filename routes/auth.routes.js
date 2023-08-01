@@ -9,11 +9,12 @@ const SALTROUNDS = 10;
 const User = require("../models/User.model");
 
 //middlewares
-const isLoggedOut = require("../middleware/isLoggedOut");
-const isLoggedIn = require("../middleware/isLoggedIn");
+const isLoggedOut = require("../middleware/isLoggedIn");
+const isLoggedIn = require("../middleware/isLoggedOut");
 
 //create a new user 
 router.get("/register", isLoggedOut, (req, res) => {
+  console.log("requesting signup")
   res.render("auth/signup");
 });
 
@@ -48,7 +49,7 @@ router.post("/register", isLoggedOut, async (req, res, next) => {
   if (!isPasswordValid(password)) {
     const message = {
       type: 'danger',
-      content: 'Password must contain at least a special character, a number and between 6 - 16 characters long.'
+      content: 'Password must be 6-16 characters-long and contain at least 1 special character (!@#$%^&*) and 1 number.'
     }
     return res.status(400).render('auth/signup', { message })
   }
@@ -56,8 +57,12 @@ router.post("/register", isLoggedOut, async (req, res, next) => {
   try {
     const SALT = await bcrypt.genSalt(SALTROUNDS);
     const passwordHashed = await bcrypt.hash(password, SALT);
-    const newUser = User.create({ username, password: passwordHashed, email, aboutMe, interests, location, dob })
-    res.redirect('/login');
+    const newUser = await User.create({username, password: passwordHashed, email, aboutMe, interests, location, dob })
+    const message = {
+      type: 'success',
+      content: 'User created successfully. You can now log in.'
+    }
+    res.render('auth/login', { message });
 
   } catch (error) {
     const message = {
@@ -105,7 +110,6 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
   }
 
   try {
-
     //Find a user with the email
     const user = await User.findOne({ email });
     if (!user) {
