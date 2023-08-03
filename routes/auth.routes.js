@@ -9,12 +9,10 @@ const SALTROUNDS = 10;
 const User = require("../models/User.model");
 
 //middlewares
-const isLoggedIn = require("../middleware/isLoggedIn");
-const isLoggedOut = require("../middleware/isLoggedOut");
+const {isLoggedIn, isLoggedOut } = require('../middleware/route.guard')
 
 //create a new user 
 router.get("/register", isLoggedOut, (req, res) => {
-  console.log("requesting signup")
   res.render("auth/signup");
 });
 
