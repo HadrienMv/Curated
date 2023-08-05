@@ -11,6 +11,9 @@ const User = require("../models/User.model");
 //middlewares
 const {isLoggedIn, isLoggedOut } = require('../middleware/route.guard')
 
+//utils 
+const {isEmpty, getMessage} = require('./utils')
+
 //create a new user 
 router.get("/register", isLoggedOut, (req, res) => {
   res.render("auth/signup");
@@ -22,10 +25,7 @@ router.post("/register", isLoggedOut, async (req, res, next) => {
 
   // Checking if any of the mandatory fields are emtpy
   if (isEmpty(email) || isEmpty(password)) {
-    const message = {
-      type: 'danger',
-      content: 'Email or password cannot be empty.'
-    }
+    const message = getMessage('Email or password cannot be empty.');
     res.status(400).render("auth/signup", { message });
 
     return;
@@ -33,10 +33,7 @@ router.post("/register", isLoggedOut, async (req, res, next) => {
 
   // Checking to see if passwords match 
   if (!isMatch(password, confirmPassword)) {
-    const message = {
-      type: 'danger',
-      content: 'Passwords do not match'
-    }
+    const message = getMessage('Passwords do not match')
     res.status(400).render("auth/signup", { message });
 
     return;
@@ -145,7 +142,7 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      const message = getError(err)
+      const message = getMessage(err)
       res.status(500).render("auth/logout", {message});
       return;
     }
@@ -156,10 +153,6 @@ router.get("/logout", isLoggedIn, (req, res) => {
 
 
 //utility functions 
-const isEmpty = (value) => {
-  return !value || value === ''
-}
-
 const isMatch = (password1, password2) => {
   return password1 === password2;
 }
@@ -169,7 +162,5 @@ const isPasswordValid = (password) => {
   return passwordValidatorRegex.test(password);
 }
 
-const getError = (error) => {
-  return {type: 'danger', content:error.message}
-}
+
 module.exports = router;

@@ -81,3 +81,26 @@
 .form-group{
   margin-bottom: 15px;
 }
+
+.w-310 {
+  width: 310px;
+  min-height: 180px;
+}
+
+.left-new {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bg-new {
+  background-color: #495057;
+}
+
+.header {
+  color: white
+}
+
+.btn-width {
+  width: 90px;
+}
