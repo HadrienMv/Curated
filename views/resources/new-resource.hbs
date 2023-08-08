@@ -1,0 +1,31 @@
+<div class="container register">
+  <div class="row">
+    <div class="col-md-3 left-new">
+      <h3>Resource Details <i class="fa-solid fa-plus"></i></h3>
+      <p>Enter the details of the new resource.</p>
+    </div>
+    <div class="col-md-9 right bg-new">
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <form class="row gy-3 register-form" method="post" action="/{{_id}}/add">
+            <div class="col-md-8">
+              <div class="form-group">
+                <input type="text" class="form-control" name="title" placeholder="Name of resource" value="" />
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="link" placeholder="Resource link" value="" />
+                <div class="mt-3 d-flex justify-content-end form-check">
+                  <input type="checkbox" class="form-check-input mx-2" id="videoCheck" name="isText">
+                  <label class="form-check-label text-white" for="videoCheck">Text</label>
+                </div>
+              </div>
+
+              <input type="submit" class="custom-btn" value="Create" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

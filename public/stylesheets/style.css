@@ -104,3 +104,7 @@
 .btn-width {
   width: 90px;
 }
+
+.expand-card {
+  height: 80vh;
+}

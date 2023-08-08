@@ -16,10 +16,21 @@ const isLink = (link) => {
   return validLinkRegex.test(link);
 }
 
+function getYouTubeEmbedUrl(videoUrl) {
+  const videoIdRegex = /(?:\/embed\/|\/watch\?v=|v=|\/\d{1,2}\/|\/u\/\w\/|\/embed\/|\/v\/|\/e\/|\/watch\?v=|v=|\/d{1,2}\/|\/u\/\w\/|\/v\/|\/e\/)([^#\&\?]*).*/;
+  const match = videoUrl.match(videoIdRegex);
+  if (match && match[1]) {
+      return `https://www.youtube.com/embed/${match[1]}`;
+  }
+  return null; // Invalid URL format
+}
+
+
 
 module.exports = {
   getMessage, 
   isEmpty,
-  isLink
+  isLink, 
+  getYouTubeEmbedUrl
 
 }

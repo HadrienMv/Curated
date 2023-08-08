@@ -1,1 +1,29 @@
-<p>Bucket details will go here</p>
+<div class="card expand-card">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <div class="bucket-left-container">
+        {{> bucketDetailCard this }}
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="bucket-right-container">
+        <div class="row" id="resourceCards">
+          {{#each resources}}
+          <div class="col-md-4">
+            <div class="card my-5 py-2">
+              <div class="card-body">
+                <h5 class="card-title pb-1">{{title}}</h5>
+                <div class="video-container">
+                  <div class="youtube-video" data-video="{{url}}">
+                    <iframe src="{{url}}" width="100%" frameborder="0" allowfullscreen="true"></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

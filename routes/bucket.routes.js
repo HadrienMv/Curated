@@ -2,7 +2,7 @@ const express = require('express');
 const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
 const {isLoggedIn, isLoggedOut} = require('../middleware/route.guard');
-const { getMessage, isEmpty, isLink } = require('./utils');
+const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl } = require('./utils');
 const router = express.Router();
 
 
@@ -28,7 +28,11 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 
     try{
         const type  = !isText ? 'video' : 'text'
-        const newResource = await Resource.create({title:resourceName, url:resourceLink, type});
+        let url = resourceLink;
+        if(!isText){
+            url = getYouTubeEmbedUrl(resourceLink);
+        }
+        const newResource = await Resource.create({title:resourceName, url, type});
         const newBucket = await Bucket.create({name:bucketName, description:bucketDescription, resources:[newResource._id], owner:userId});
         const userBuckets = await getAllUserBuckets(userId);
         const message = getMessage(`${newBucket.name} created successfully`, 'success')
@@ -43,8 +47,8 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 router.get('/:bucketId/details', isLoggedIn, async(req, res) => {
     const {bucketId} = req.params
     try{
-        const bucket = await Bucket.findById(bucketId).populate('resources')
-        res.render('buckets/bucket-details', {bucket})
+        const bucket = await Bucket.findById(bucketId).populate('resources');
+        res.render('buckets/bucket-details', bucket)
     }catch(error){
         const message = getMessage(error);
         res.render('buckets/buckets', {message})
@@ -54,7 +58,6 @@ router.get('/:bucketId/details', isLoggedIn, async(req, res) => {
 /* GET buckets main page */
 router.get("/all", isLoggedIn, async (req, res, next) => {
     const userId = getCurrentUser(req);
-    console.log('user_')
 
     try{
 
