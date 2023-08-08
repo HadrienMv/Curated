@@ -9,18 +9,19 @@ const SALTROUNDS = 10;
 const User = require("../models/User.model");
 
 //middlewares
-const isLoggedOut = require("../middleware/isLoggedIn");
-const isLoggedIn = require("../middleware/isLoggedOut");
+const isLoggedIn = require("../middleware/isLoggedIn");
+const isLoggedOut = require("../middleware/isLoggedOut");
 
 //create a new user 
 router.get("/register", isLoggedOut, (req, res) => {
-  console.log("requesting signup")
+  console.log("Requesting signup")
   res.render("auth/signup");
 });
 
 // POST /auth/signup
 router.post("/register", isLoggedOut, async (req, res, next) => {
-  const { username, email, password, confirmPassword, aboutMe, interests, location, dob } = req.body;
+  console.log("Sending signup form")
+  const { username, email, password, confirmPassword, location, dob } = req.body;
 
   // Checking if any of the mandatory fields are emtpy
   if (isEmpty(email) || isEmpty(password)) {
@@ -57,7 +58,7 @@ router.post("/register", isLoggedOut, async (req, res, next) => {
   try {
     const SALT = await bcrypt.genSalt(SALTROUNDS);
     const passwordHashed = await bcrypt.hash(password, SALT);
-    const newUser = await User.create({username, password: passwordHashed, email, aboutMe, interests, location, dob })
+    const newUser = await User.create({username, password: passwordHashed, email, location, dob })
     const message = {
       type: 'success',
       content: 'User created successfully. You can now log in.'
