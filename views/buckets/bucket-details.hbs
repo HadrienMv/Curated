@@ -2,19 +2,24 @@
   <div class="row g-0">
     <div class="col-md-4">
       <div class="bucket-left-container">
-        {{> bucketDetailCard this }}
+        {{> bucketDetailCard bucket }}
       </div>
     </div>
     <div class="col-md-8">
       <div class="bucket-right-container">
         <div class="row" id="resourceCards">
-          {{#each resources}}
+          {{#each bucket.resources}}
           <div class="col-md-4">
             <div class="card my-5 py-2">
               <div class="card-body">
-                <h5 class="card-title pb-1">{{title}}</h5>
+                <div class="header-actions d-flex align-items-center justify-content-between">
+                  <h5 class="card-title pb-1">{{title}}</h5>
+                  <form action="/resources/{{../bucket._id}}/{{this._id}}/delete" method="post" class="max-height-35">
+                    <button class="btn btn-danger"> <i class="fa-solid fa-trash"></i></button>
+                  </form>
+                </div>
                 <div class="video-container">
-                  <div class="youtube-video" data-video="{{url}}">
+                  <div class="youtube-video">
                     <iframe src="{{url}}" width="100%" frameborder="0" allowfullscreen="true"></iframe>
                   </div>
                 </div>
@@ -23,6 +28,29 @@
           </div>
           {{/each}}
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Delete Action</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Deleting the {{bucket.name}} will remove all the resources in the bucket
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <form action="/buckets/{{bucket._id}}/delete" method="post" class="max-height-35">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+
       </div>
     </div>
   </div>

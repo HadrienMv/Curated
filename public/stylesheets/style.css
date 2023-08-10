@@ -108,3 +108,11 @@
 .expand-card {
   height: 80vh;
 }
+
+.bucket-action {
+  gap:15px;
+}
+
+.max-height-35 {
+  height: 35px;
+}

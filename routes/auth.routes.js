@@ -132,9 +132,8 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
       }
       res.status(400)
         .render('auth/login', { message })
+      return
     }
-
-    next(error)
   }
 });
 
