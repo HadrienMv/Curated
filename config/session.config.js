@@ -10,14 +10,9 @@ module.exports = app => {
       secret: process.env.SESSION_SECRET,
       resave: true,
       saveUninitialized: false,
-<<<<<<< HEAD
-      proxy: true,
-      name: 'Curated-application-cookie',
-=======
       store: MongoStore.create({
         mongoUrl: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Curated",
         }),
->>>>>>> dev
       cookie: {
         sameSite: 'none',
         secure: true,
