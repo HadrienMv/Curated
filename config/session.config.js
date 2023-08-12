@@ -10,10 +10,10 @@ module.exports = app => {
       resave: true,
       saveUninitialized: false,
       cookie: {
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none',
+        secure: true,
         httpOnly: true,
-        maxAge: 60 * 60 * 1000
+        maxAge: 48 * 60 * 60 * 1000
       }
     })
   );
