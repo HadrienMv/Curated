@@ -1,20 +1,20 @@
 <section class="vh-100" style="background-color: #e2eaee;">
   <div class="container py-4 h-100">
-    <div class="row d-flex h-100">
-      <div class="col col-sm-12 col-md-12 col-lg-12">
-        <div class="card" style="border-radius: 15px;">
-          <div class="card-body p-4">
-            <div class="d-flex text-black">
-              <div class="flex-shrink-0 me-2">
+    <div class="row d-flex justify-content-center h-100">
+      <div class="col col-sm-12 col-md-11 col-lg-10 p-2">
+        <div class="card p-4" style="border-radius: 15px;">
+          <div class="card-body">
+            <div class="d-flex align-items-center pb-2 text-black">
+              <div class="col-2 me-2">
                 <img src={{profilePic}}
                   alt="User profile picture" class="img-fluid"
-                  style="width: 180px; border-radius: 10px;">
+                  style="width: 180px; border-radius: 100px;">
               </div>
-              <div class="flex-grow-1 ms-3">
+              <div class="col-9 ms-3">
                 <h5 class="mb-1">{{username}}</h5>
                 <p class="mb-2 pb-1" style="color: #2b2a2a;">Member since {{newCreatedAt}}</p>
-                <section class="d-flex justify-content-start align-items-stretch">
-                    <div class="col-4 me-2">
+                <section class="d-flex justify-content-start align-items-center">
+                    <div class="col-8 me-2">
                         <div class="d-flex justify-content-start align-items-stretch rounded-3 p-2"
                     style="background-color: #efefef;">
                             <div>
@@ -23,29 +23,31 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-4 mx-2">
-                        <div class="d-flex justify-content-between rounded-3 p-2"
+                    <div class="col-3 mx-2">
+                        <div class="d-flex justify-content-between align-items-center rounded-3 p-2"
                     style="background-color: #efefef;">
                             <div>
                                 <p class="small text-muted my-0">Contributions</p>
                                 <p class="my-0">{{bucketsCount}}</p>
                             </div>
-                            <a class="btn btn-info text-light" href="/:id/buckets">See shares</a> 
                         </div>
+                    </div>
+                    <div class="col-1 ms-2">
+                      <a type="button" class="btn btn-info btn-sm text-light" href="/:id/buckets">See shares</a> 
                     </div>
                 </section>
               </div>
             </div>
-            <section class="d-flex justify-content-center mx-4 mt-3">
-                <div class="col-5">
-                    <div class="d-flex justify-content-start rounded-3 p-2 my-2 mx-2"
+            <section class="d-flex justify-content-start my-3">
+                <div class="col-6">
+                    <div class="d-flex justify-content-start rounded-3 p-2 mb-3 me-2"
                         style="background-color: #efefef;">
                         <div>
                             <p class="small text-muted mb-1">Email</p>
                             <p class="mb-0">{{email}}</p>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-start rounded-3 p-2 my-2 mx-2"
+                    <div class="d-flex justify-content-start rounded-3 p-2 me-2"
                         style="background-color: #efefef;">
                         <div>
                             <p class="small text-muted mb-1">Interests</p>
@@ -53,15 +55,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-5">
-                    <div class="d-flex justify-content-start rounded-3 p-2 my-2 mx-2"
+                <div class="col-6">
+                    <div class="d-flex justify-content-start rounded-3 p-2 mb-3 ms-2"
                         style="background-color: #efefef;">
                         <div>
                             <p class="small text-muted mb-1">Country</p>
                             <p class="mb-0">{{location}}</p>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-start rounded-3 p-2 my-2 mx-2"
+                    <div class="d-flex justify-content-start rounded-3 p-2 ms-2"
                         style="background-color: #efefef;">
                         <div>
                             <p class="small text-muted mb-1">Date of birth</p>
@@ -70,12 +72,12 @@
                     </div>
                 </div>
             </section>
-            <div class="d-flex justify-content-end mt-3">
-                  <a class="btn btn-primary me-1" href="/profile/edit">Edit account info</a>
-                  <button type="button" class="btn btn-success me-1" data-bs-toggle="modal" data-bs-target="#profilePicModal">
+            <div class="d-flex justify-content-end mt-4">
+                  <a class="btn btn-md btn-primary me-1" href="/profile/edit">Edit account info</a>
+                  <button type="button" class="btn btn-md btn-success me-1" data-bs-toggle="modal" data-bs-target="#profilePicModal">
                     Update profile picture
                   </button>
-                  <button type="button" class="btn btn-danger me-1" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                  <button type="button" class="btn btn-md btn-danger me-1" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     Delete account
                   </button>
             </div>
@@ -110,7 +112,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Account deletion</h5>
+        <h5 class="modal-title">Confirm account deletion</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

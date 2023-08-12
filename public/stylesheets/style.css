@@ -116,3 +116,7 @@
 .max-height-35 {
   height: 35px;
 }
+
+p {
+  margin: 0em;
+}

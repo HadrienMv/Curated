@@ -3,13 +3,19 @@ const moment = require('moment')
 const fileUploader = require('../config/cloudinary.config');
 const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
-const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
 const User = require('../models/User.model');
+const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
 const router = express.Router();
 
 /* GET home page */
 router.get("/", async (req, res, next) => {
-  const allBuckets = await Bucket.find()
+  const allBuckets = await Bucket.find().populate('owner').populate('resources')
+  allBuckets.forEach(bucket => {
+    bucket['newCreatedAt'] = moment(bucket['createdAt']).format('MM-DD-YYYY')
+    bucket['videoCount'] = bucket['resources'].length
+    bucket['upVoteCount'] = bucket['upVote'].length
+    bucket['downVoteCount'] = bucket['downVote'].length
+  })
   res.render("index",{buckets:allBuckets});
 });
 
@@ -19,6 +25,7 @@ router.get("/create", isLoggedIn, async (req, res, next) => {
   .then(myUser => res.render("create", myUser))
 })
 
+// GET profile page
 router.get('/profile', isLoggedIn, (req, res, next) => {
   User.findById(req.session.currentUser._id)
   .then(myUser => {
@@ -29,6 +36,7 @@ router.get('/profile', isLoggedIn, (req, res, next) => {
   })
 })
 
+// GET profile edit page
 router.get('/profile/edit', isLoggedIn, (req, res, next) => {
   User.findById(req.session.currentUser._id)
   .then(myUser => {
@@ -39,6 +47,7 @@ router.get('/profile/edit', isLoggedIn, (req, res, next) => {
   })
 })
 
+// POST profile edits
 router.post('/profile/edit', isLoggedIn, (req, res, next) => {
   const {email, interests, location, dob, aboutMe} = req.body
   const message = {
@@ -55,6 +64,7 @@ router.post('/profile/edit', isLoggedIn, (req, res, next) => {
   })
 })
 
+// POST profile picture update
 router.post('/update-picture', fileUploader.single('profilePic'), (req, res) => {
   User.findByIdAndUpdate(req.session.currentUser._id, {profilePic: req.file.path}, {new:true})
   .then(myUser => {
@@ -65,6 +75,7 @@ router.post('/update-picture', fileUploader.single('profilePic'), (req, res) => 
   })
 });
 
+// GET profile deletion modal
 router.get('/profile/delete', isLoggedIn, (req, res, next) => {
   User.findByIdAndDelete(req.session.currentUser._id)
   .then(result => {
