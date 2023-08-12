@@ -21,8 +21,8 @@ require("./config")(app);
 require("./config/session.config")(app);
 
 
-const sessionExpirationMiddleWare = require('./middleware/session-expiration');
-app.use(sessionExpirationMiddleWare);
+// const sessionExpirationMiddleWare = require('./middleware/session-expiration');
+// app.use(sessionExpirationMiddleWare);
 
 const capitalize = require("./utils/capitalize");
 const projectName = "Curated";
