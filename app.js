@@ -20,14 +20,14 @@ const app = express();
 require("./config")(app);
 require("./config/session.config")(app);
 
-
-const sessionExpirationMiddleWare = require('./middleware/session-expiration');
-app.use(sessionExpirationMiddleWare);
-
 const capitalize = require("./utils/capitalize");
 const projectName = "Curated";
 
 app.locals.appTitle = `${capitalize(projectName)} created with IronLauncher`;
+app.use((req, res, next) => {
+    app.locals.currentUser = req.session.currentUser
+    next()
+})
 
 // 👇 Start handling routes here
 const indexRoutes = require("./routes/index.routes");
