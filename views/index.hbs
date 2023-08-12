@@ -23,50 +23,112 @@
     </h3>
 </section> --}}
 
-<section class="container-fluid py-4 ps-5 border-top border-dark-subtle border-1">
-    <div class="row d-flex justify-content-around ps-5">
-        {{#each buckets}}
-            <div class="card-fluid mb-4 px-0" style="width: 32%;">
-                <div class="card-body">
-                    <div class="row mb-2 d-flex justify-content-start px-0 mx-0">
-                        <div class="col z-index-n1">
-                            <a href="/buckets/{{_id}}/details"><img class="img-fluid" src="{{resources.[0].thumbnail}}" alt="" style="border-radius: 20px; width: 100%;"></a>
-                        </div>
+<section class="container-fluid py-4 border-top border-dark-subtle border-1">
+    <div class="row d-flex justify-content-around">
+        <div class="col-1 py-0">
+            <div style="margin-bottom: 12px;">
+                <a style="text-decoration: none; color: black;" href="/">
+                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(0, 0, 0, 0.445);">
+                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://cdn.icon-icons.com/icons2/1856/PNG/512/all-inclusive_116777.png" alt="Everything">
+                        <p style="font-size: 0.8em;">Everything</p>
                     </div>
-                    <div class="row px-3">
-                        <div class="col-2 p-1">
-                            <img src="{{owner.profilePic}}" class="img-fluid" style="border-radius: 50px; width: 100%;" alt="...">
-                        </div>
-                        <div class="col-10 py-1 px-2">
-                            <div class="row">
-                                <h5 class="card-title"><a href="/buckets/{{_id}}/details" style="text-decoration: none; color: black;">{{name}}</a></h5>
+                </a>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <a style="text-decoration: none; color: black;" href="/feed/lifestyle">
+                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(0, 128, 128, 0.534);">
+                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://www.pngkit.com/png/full/429-4291169_lifestyle-icon-icon.png" alt="Lifestyle">
+                        <p style="font-size: 0.8em;">Lifestyle</p>
+                    </div>
+                </a>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <a style="text-decoration: none; color: black;" href="/feed/health">
+                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(0, 0, 255, 0.479);">
+                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://www.nicepng.com/png/detail/799-7998911_placeholder-health-icons-png.png" alt="Health">
+                        <p style="font-size: 0.8em;">Health</p>
+                    </div>
+                </a>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <a style="text-decoration: none; color: black;" href="/feed/music">
+                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(255, 255, 0, 0.5);">
+                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/2048px-Apple_Music_icon.svg.png" alt="Music">
+                        <p style="font-size: 0.8em;">Music</p>
+                    </div>
+                </a>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <a style="text-decoration: none; color: black;" href="/feed/business">
+                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(238, 130, 238, 0.518);">
+                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://cdn-icons-png.flaticon.com/512/1933/1933920.png" alt="Business">
+                        <p style="font-size: 0.8em;">Business</p>
+                    </div>
+                </a>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <a style="text-decoration: none; color: black;" href="/feed/food">
+                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(165, 42, 42, 0.6);">
+                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/orange_travelpictdinner_1484336833.png" alt="Food">
+                        <p style="font-size: 0.8em;">Food</p>
+                    </div>
+                </a>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <a style="text-decoration: none; color: black;" href="/feed/arts">
+                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(0, 128, 0, 0.566);">
+                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://www.clipartmax.com/png/middle/144-1445812_download-icon-art-and-culture-png.png" alt="Arts">
+                        <p style="font-size: 0.8em;">Arts</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-11">
+            <div class="row d-flex justify-content-around">
+                {{#each buckets}}
+                <div class="card-fluid mb-4 px-0" style="width: 32%;">
+                    <div class="card-body">
+                        <div class="row mb-2 d-flex justify-content-start px-0 mx-0">
+                            <div class="col z-index-n1">
+                                <a href="/buckets/{{_id}}/details"><img class="img-fluid" src="{{resources.[0].thumbnail}}" alt="" style="border-radius: 20px; width: 100%;"></a>
                             </div>
-                            <div class="row d-flex flex-row mt-1 align-items-center">
-                                <div class="col-8">
-                                    <p class="text-secondary-emphasis" style="font-size: 0.9em; font-weight: 600;">{{owner.username}}</p>
-                                    <p class="text-secondary small pt-0 mt-0" style="font-size: 0.8em;"><span>Shared on </span>{{newCreatedAt}}</p>
+                        </div>
+                        <div class="row px-3">
+                            <div class="col-2 text-end p-1">
+                                <img src="{{owner.profilePic}}" class="img-fluid" style="border-radius: 50px; width: 80%;" alt="...">
+                            </div>
+                            <div class="col-10 py-1 px-2">
+                                <div class="row">
+                                    <h5 class="card-title"><a href="/buckets/{{_id}}/details" style="text-decoration: none; color: black;">{{name}}</a></h5>
                                 </div>
-                                <div class="col-4 ps-0 text-end">
-                                    <span class="badge bg-secondary" style="font-size: 0.75em;">{{videoCount}} VIDEO(S)</span>
-                                    <div class="rounded-3 p-0 my-1"
-                                        style="background-color: #efefef;">
-                                        <div class="row d-flex px-0 justify-content-center">
-                                            <div class="col-4 d-flex flex-row justify-content-center align-items-center py-1">
-                                                <a href="/buckets/{{_id}}/upvote"><img style="width: 15px;" src="https://cdn-icons-png.flaticon.com/512/0/193.png" alt=""></a>
-                                                <p class="ps-2" style="font-size: 0.7em;">{{upVoteCount}}</p>
-                                            </div>
-                                            <div class="col-4 d-flex flex-row justify-content-center align-items-center py-1">
-                                                <a href="/buckets/{{_id}}/downvote"><img style="width: 15px;" src="https://cdn-icons-png.flaticon.com/512/25/25395.png" alt=""></a>
-                                                <p class="ps-2" style="font-size: 0.7em;">{{downVoteCount}}</p>
-                                            </div>  
-                                        </div>
+                                <div class="row d-flex flex-row mt-1 align-items-center">
+                                    <div class="col-8">
+                                        <p class="text-secondary-emphasis" style="font-size: 0.8em; font-weight: 600;">{{owner.username}}</p>
+                                        <p class="text-secondary small pt-0 mt-0" style="font-size: 0.8em;"><span>Shared on </span>{{newCreatedAt}}</p>
                                     </div>
-                                </div>                                
+                                    <div class="col-4 ps-0 text-end">
+                                        <span class="badge bg-secondary" style="font-size: 0.75em;">{{videoCount}} VIDEO(S)</span>
+                                        <div class="rounded-3 p-0 my-1"
+                                            style="background-color: #efefef;">
+                                            <div class="row d-flex px-0 justify-content-center">
+                                                <div class="col-4 d-flex flex-row justify-content-center align-items-center py-1">
+                                                    <a href="/buckets/{{_id}}/upvote"><img style="width: 15px;" src="https://cdn-icons-png.flaticon.com/512/0/193.png" alt=""></a>
+                                                    <p class="ps-2" style="font-size: 0.7em;">{{upVoteCount}}</p>
+                                                </div>
+                                                <div class="col-4 d-flex flex-row justify-content-center align-items-center py-1">
+                                                    <a href="/buckets/{{_id}}/downvote"><img style="width: 15px;" src="https://cdn-icons-png.flaticon.com/512/25/25395.png" alt=""></a>
+                                                    <p class="ps-2" style="font-size: 0.7em;">{{downVoteCount}}</p>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                {{/each}}
             </div>
-        {{/each}}
+        </div>
     </div>
 </section>

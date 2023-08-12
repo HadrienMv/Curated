@@ -16,7 +16,21 @@ router.get("/", async (req, res, next) => {
     bucket['upVoteCount'] = bucket['upVote'].length
     bucket['downVoteCount'] = bucket['downVote'].length
   })
-  res.render("index",{buckets:allBuckets});
+  res.render("index", {buckets:allBuckets});
+});
+
+router.get("/feed/:tag", async (req, res, next) => {
+  const {tag} = req.params
+  console.log({tag})
+
+  const allBuckets = await Bucket.find({tags: tag}).populate('owner').populate('resources')
+  allBuckets.forEach(bucket => {
+    bucket['newCreatedAt'] = moment(bucket['createdAt']).format('MM-DD-YYYY')
+    bucket['videoCount'] = bucket['resources'].length
+    bucket['upVoteCount'] = bucket['upVote'].length
+    bucket['downVoteCount'] = bucket['downVote'].length
+  })
+  res.render("index", {buckets:allBuckets});
 });
 
 // GET create buckets page
