@@ -20,9 +20,8 @@ const app = express();
 require("./config")(app);
 require("./config/session.config")(app);
 
-
-// const sessionExpirationMiddleWare = require('./middleware/session-expiration');
-// app.use(sessionExpirationMiddleWare);
+const sessionExpirationMiddleWare = require('./middleware/session-expiration');
+app.use(sessionExpirationMiddleWare);
 
 const capitalize = require("./utils/capitalize");
 const projectName = "Curated";
@@ -41,6 +40,7 @@ app.use("/buckets", bucketRoutes)
 
 const resourceRoutes = require('./routes/resource.routes')
 app.use("/resources", resourceRoutes);
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 
