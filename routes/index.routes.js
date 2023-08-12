@@ -3,8 +3,7 @@ const moment = require('moment')
 const fileUploader = require('../config/cloudinary.config');
 const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
-const isLoggedIn = require('../middleware/isLoggedIn');
-const isLoggedOut = require('../middleware/isLoggedOut');
+const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
 const User = require('../models/User.model');
 const router = express.Router();
 
