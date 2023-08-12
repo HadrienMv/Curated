@@ -7,8 +7,10 @@ module.exports = app => {
   app.use(
     session({
       secret: process.env.SESSION_SECRET,
-      resave: true,
-      saveUninitialized: false,
+      resave: false,
+      saveUninitialized: true,
+      proxy: true,
+      name: 'Curated-application-cookie',
       cookie: {
         sameSite: 'none',
         secure: true,
