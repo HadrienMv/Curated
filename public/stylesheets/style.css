@@ -106,7 +106,7 @@
 }
 
 .expand-card {
-  height: 80vh;
+ height: 100%;
 }
 
 .bucket-action {
@@ -115,4 +115,17 @@
 
 .max-height-35 {
   height: 35px;
+}
+
+nav .nav-link:hover {
+  color: teal;
+  opacity: 0.5;
+}
+
+nav .active {
+  color: pink;
+}
+
+.buckets-right-container {
+  padding-right: 20px;
 }

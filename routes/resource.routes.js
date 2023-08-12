@@ -13,7 +13,7 @@ router.get('/:bucketId/add', isLoggedIn, async (req, res) => {
     res.render('resources/new-resource', bucket)
   }catch(error){
     const message = getMessage(error);
-    res.render('resources/new-resource', {message});
+    res.render('resources/new-resource', {message, active: 'buckets'});
   }
 })
 
@@ -24,12 +24,12 @@ router.post('/:bucketId/add', async (req, res) => {
 
   if(isEmpty(title) || isEmpty(link)){
     const message = getMessage('None of the fields can be empty');
-    res.render('resources/new-resource', {message})
+    res.render('resources/new-resource', {message, active: 'buckets'})
 }
 
   if (!isLink(link)) {
     const message = getMessage('Invalid link to resource');
-    res.render('resources/new-resource', { message })
+    res.render('resources/new-resource', { message, active: 'buckets' })
   }
 
   try {
@@ -47,7 +47,7 @@ router.post('/:bucketId/add', async (req, res) => {
     const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources:updatedResources}, {new: true}).populate('resources')
     const message = getMessage(`${resource.title} added successfully`,'success');
    
-    res.render('buckets/bucket-details', {bucket:updatedBucket, message})
+    res.render('buckets/bucket-details', {bucket:updatedBucket, message, active: 'buckets'})
   }
   catch (error) {
     const message = getMessage(error);

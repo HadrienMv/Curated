@@ -1,8 +1,8 @@
 const express = require('express');
 const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
-const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
-const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl } = require('./utils');
+const { isLoggedIn, isLoggedOut} = require('../middleware/route.guard');
+const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getCurrentUser } = require('./utils');
 const router = express.Router();
 
 //Display create form
@@ -51,10 +51,10 @@ router.get('/:bucketId/details', isLoggedIn, async (req, res) => {
     const { bucketId } = req.params
     try {
         const bucket = await Bucket.findById(bucketId).populate('resources');
-        res.render('buckets/bucket-details', {bucket})
+        res.render('buckets/bucket-details', {bucket, active:'buckets'})
     } catch (error) {
         const message = getMessage(error);
-        res.render('buckets/buckets', { message })
+        res.render('buckets/buckets', { message, active:'buckets'})
     }
 })
 
@@ -65,11 +65,11 @@ router.get("/:bucketId/update", isLoggedIn, async (req, res) => {
     try{
         const bucket = await Bucket.findById(bucketId);
 
-        res.render("buckets/edit-bucket", {bucket})
+        res.render("buckets/edit-bucket", {bucket, active:'buckets'})
     }catch(error){
         const message = getMessage(error);
 
-        res.render('buckets/bucket-details', {message})
+        res.render('buckets/bucket-details', {message, active:'buckets'})
     }
 })
 
@@ -81,7 +81,7 @@ router.post("/:bucketId/update", isLoggedIn, async (req, res) => {
 
     if (isEmpty(description) || isEmpty(name) ) {
         const message = getMessage('None of the fields can be empty');
-        res.render('buckets/edit-bucket', { bucket:{name, description, _id:bucketId}, message })
+        res.render('buckets/edit-bucket', { bucket:{name, description, _id:bucketId}, message, active:'buckets' })
         return
     }
 
@@ -89,10 +89,10 @@ router.post("/:bucketId/update", isLoggedIn, async (req, res) => {
         const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {name, description}, {new: true}).populate("resources");
         const message = getMessage(`${updatedBucket.name} updated successfully`, 'success');
 
-        res.render('buckets/bucket-details', {bucket: updatedBucket, message})
+        res.render('buckets/bucket-details', {bucket: updatedBucket, message, active:'buckets'})
     }catch(error){
         const message = getMessage(error);
-        res.render('buckets/edit-bucket', { bucket:{name, description, _id:bucketId}, message})
+        res.render('buckets/edit-bucket', { bucket:{name, description, _id:bucketId}, message, active:'buckets'})
     }
 });
 
@@ -116,7 +116,7 @@ router.post('/:bucketId/delete', async(req, res) => {
         res.redirect('/buckets/all');
       } catch (err) {
         const message = getMessage(err);
-        res.render('buckets/bucket-details', { bucket, message });
+        res.render('buckets/bucket-details', { bucket, message, active:'buckets' });
       }
     
 })
@@ -128,25 +128,17 @@ router.get("/all", isLoggedIn, async (req, res, next) => {
     try {
 
         const buckets = await getAllUserBuckets(userId);
-        res.render('buckets/buckets', { buckets })
+        res.render('buckets/buckets', { buckets , active:'buckets'})
 
     } catch (error) {
         const message = getMessage(error);
-        res.render('buckets/buckets', { message })
+        res.render('buckets/buckets', { message, active:'buckets' })
     }
 });
 
 
 const getAllUserBuckets = (userId) => {
     return Bucket.find({ owner: userId })
-}
-
-const getCurrentUser = (req) => {
-    if (!req.session.currentUser) {
-        return null
-    }
-
-    return req.session.currentUser._id;
 }
 
 module.exports = router;

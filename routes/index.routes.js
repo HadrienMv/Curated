@@ -10,13 +10,15 @@ const router = express.Router();
 /* GET home page */
 router.get("/", async (req, res, next) => {
   const allBuckets = await Bucket.find()
-  res.render("index",{buckets:allBuckets});
+  res.render("index",{buckets:allBuckets, active:'home'});
 });
 
 // GET create buckets page
 router.get("/create", isLoggedIn, async (req, res, next) => {
   User.findById(req.session.currentUser._id)
-  .then(myUser => res.render("create", myUser))
+  .then(myUser => {
+    myUser['active'] = 'account'
+    res.redirect('/buckets/create')})
 })
 
 router.get('/profile', isLoggedIn, (req, res, next) => {
@@ -25,6 +27,7 @@ router.get('/profile', isLoggedIn, (req, res, next) => {
     myUser['bucketsCount'] = myUser.buckets.length
     myUser['newDob'] = moment(myUser['dob']).format('MM-DD-YYYY')
     myUser['newCreatedAt'] = moment(myUser['createdAt']).format('MMMM YYYY')
+    myUser['active']='profile'
     res.render('profile', myUser)
   })
 })
@@ -35,6 +38,7 @@ router.get('/profile/edit', isLoggedIn, (req, res, next) => {
     myUser['bucketsCount'] = myUser.buckets.length
     myUser['newDob'] = moment(myUser['dob']).format('YYYY-MM-DD')
     myUser['newCreatedAt'] = moment(myUser['createdAt']).format('MMMM YYYY')
+    myUser['active']='profile'
     res.render('profile-edit' , myUser)
   })
 })
@@ -51,6 +55,7 @@ router.post('/profile/edit', isLoggedIn, (req, res, next) => {
     myUser['bucketsCount'] = myUser.buckets.length
     myUser['newDob'] = moment(myUser['dob']).format('YYYY-MM-DD')
     myUser['newCreatedAt'] = moment(myUser['createdAt']).format('MMMM YYYY')
+    myUser['active']='profile'
     res.render('profile', myUser)
   })
 })
@@ -61,6 +66,7 @@ router.post('/update-picture', fileUploader.single('profilePic'), (req, res) => 
     myUser['bucketsCount'] = myUser.buckets.length
     myUser['newDob'] = moment(myUser['dob']).format('YYYY-MM-DD')
     myUser['newCreatedAt'] = moment(myUser['createdAt']).format('MMMM YYYY')
+    myUser['active']='profile'
     res.render('profile', myUser)
   })
 });
@@ -73,7 +79,7 @@ router.get('/profile/delete', isLoggedIn, (req, res, next) => {
       content: 'User deleted successfully'
     }
     req.app.locals.currentUser = null;
-    res.render('auth/login', {message})
+    res.render('auth/login', {message, active:'account'})
     })
 })
 

@@ -26,11 +26,20 @@ function getYouTubeEmbedUrl(videoUrl) {
 }
 
 
+const getCurrentUser = (req) => {
+  if (!req.session.currentUser) {
+      return null
+  }
+
+  return req.session.currentUser._id;
+}
+
 
 module.exports = {
   getMessage, 
   isEmpty,
   isLink, 
-  getYouTubeEmbedUrl
+  getYouTubeEmbedUrl,
+  getCurrentUser
 
 }

@@ -4,12 +4,7 @@
   </div>
   <div class="row gy-5 my-5 bucket-list">
 
-    {{#unless buckets}}
-      {{> newBucket }}
-    {{/unless}}
-
     {{#if buckets}}
-      {{> newBucket}}
       {{#each buckets}}
       <div class="col">
         <div class="card w-310">

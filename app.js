@@ -13,6 +13,13 @@ const express = require("express");
 // https://www.npmjs.com/package/hbs
 const hbs = require("hbs");
 hbs.registerPartials(__dirname + "/views/partials");
+// Handlebars helper to set active class for navigation
+hbs.registerHelper('isActive', (path, options) => {
+    const active = options.data.root.active
+    return path === active ? 'active' : '';
+  });
+  
+  
 
 const app = express();
 

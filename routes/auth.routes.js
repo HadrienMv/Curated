@@ -21,7 +21,6 @@ router.get("/register", isLoggedOut, (req, res) => {
 
 // POST /auth/signup
 router.post("/register", isLoggedOut, async (req, res, next) => {
-  console.log("Sending signup form")
   const { username, email, password, confirmPassword, location, dob } = req.body;
 
   // Checking if any of the mandatory fields are emtpy
