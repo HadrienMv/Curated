@@ -1,0 +1,48 @@
+<section class="container-fluid text-center py-5 bg-primary-subtle border-top border-primary border-3">
+    <h3>Today learn how to...<span>
+            <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active text-danger"  data-bs-interval="2000">
+                    Cook
+                    </div>
+                    <div class="carousel-item text-primary"  data-bs-interval="2000">
+                    Work smarter
+                    </div>
+                    <div class="carousel-item text-success"  data-bs-interval="2000">
+                    Get inspired
+                    </div>
+                    <div class="carousel-item text-warning"  data-bs-interval="2000">
+                    Play guitar
+                    </div>
+                    <div class="carousel-item text-info">
+                    Be healthier
+                    </div>
+                </div>
+            </div>
+        </span>
+    </h3>
+
+</section>
+
+<section class="container-fluid py-5 px-4 border-top border-dark-subtle border-1">
+    <div class="row d-flex justify-content-around grid gap-3">
+        {{#each buckets}}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <div class="row d-flex align-items-center">
+                        <div class="col">
+                            <img src="https://i0.wp.com/post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/03/GettyImages-1092658864_hero-1024x575.jpg?w=1155&h=1528" class="img-thumbnail" alt="...">
+                        </div>
+                        <div class="col">
+                            <h6 class="m-0 p-0">John</h6>
+                            <p class="text-secondary m-0 p-0" style="font-size: 0.7em;">Member since July 2023</p>
+                        </div>
+                    </div>
+                    <h6 class="card-title mt-3">{{name}}</h6>
+                    <p class="card-text" style="font-size: 0.8em;">{{description}}</p>
+                    <a href="#" class="btn btn-primary" style="font-size: 0.8em;">Discover</a>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</section>
