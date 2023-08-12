@@ -21,7 +21,8 @@ router.get("/register", isLoggedOut, (req, res) => {
 
 // POST /auth/signup
 router.post("/register", isLoggedOut, async (req, res, next) => {
-  const { username, email, password, confirmPassword, aboutMe, interests, location, dob } = req.body;
+  console.log("Sending signup form")
+  const { username, email, password, confirmPassword, location, dob } = req.body;
 
   // Checking if any of the mandatory fields are emtpy
   if (isEmpty(email) || isEmpty(password)) {
@@ -52,7 +53,7 @@ router.post("/register", isLoggedOut, async (req, res, next) => {
   try {
     const SALT = await bcrypt.genSalt(SALTROUNDS);
     const passwordHashed = await bcrypt.hash(password, SALT);
-    const newUser = await User.create({username, password: passwordHashed, email, aboutMe, interests, location, dob })
+    const newUser = await User.create({username, password: passwordHashed, email, location, dob })
     const message = {
       type: 'success',
       content: 'User created successfully. You can now log in.'

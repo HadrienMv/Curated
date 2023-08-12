@@ -1,0 +1,26 @@
+<section class="container-fluid ps-5 pt-5 border-top border-primary border-3 d-flex align-items-center">
+    <img src="{{profilePic}}" alt="User profile picture" class="img-fluid"
+                  style="width: 120px; border-radius: 10px;">
+    <h3 class="m-3">Hi <span class="text-primary">{{username}}</span></h3>
+    </h3>
+</section>
+
+<section class="container mx-5 my-4 py-3 bg-secondary-subtle">
+    <h4>Tell your growth story here...</h4>
+    <form class="row gy-3 register-form" action="/create" method="POST">
+        <div class="col-md-6">
+            <div class="form-group">
+                Story
+                <input type="text" class="form-control" name="name" placeholder="What is it about?" value="" />
+            </div>
+            <div class="form-group">
+                Description
+                <input type="text" class="form-control" name="name" placeholder="Describe your learning experience" value="" />
+            </div>
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </form>
+    
+</section>
