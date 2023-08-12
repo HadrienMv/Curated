@@ -12,6 +12,7 @@ const express = require("express");
 // Handles the handlebars
 // https://www.npmjs.com/package/hbs
 const hbs = require("hbs");
+hbs.registerPartials(__dirname + "/views/partials");
 
 const app = express();
 
@@ -37,6 +38,9 @@ app.use("/", authRoutes);
 
 const bucketRoutes = require('./routes/bucket.routes');
 app.use("/buckets", bucketRoutes)
+
+const resourceRoutes = require('./routes/resource.routes')
+app.use("/resources", resourceRoutes);
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 

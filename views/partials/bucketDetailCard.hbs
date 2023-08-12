@@ -1,0 +1,15 @@
+<div class="card-body">
+  <div class="card-title">{{name}}</div>
+  <p class="card-text">{{description}}</p>
+  <div class="actions d-flex justify-content-between align-items-center">
+    <div class="bucket-action d-flex ">
+      <a href="/buckets/{{_id}}/update" class="btn btn-warning max-height-35"><i class="fa-solid fa-pencil"></i></a>
+      <button type="button" class="btn btn-danger max-height-35" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+    <div class="add-resoure">
+      <a href="/resources/{{_id}}/add" class="btn btn-success"><i class="fa-solid fa-plus"></i></a>
+    </div>
+  </div>
+</div>

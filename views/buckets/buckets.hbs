@@ -1,1 +1,32 @@
-<p>All the buckets will show here.</p>
+<div class="container my-5">
+  <div class="d-flex justify-content-center">
+    <h2><i class="fa-solid fa-list-ul"></i> <span>Buckets</span></h2>
+  </div>
+  <div class="row gy-5 my-5 bucket-list">
+
+    {{#unless buckets}}
+      {{> newBucket }}
+    {{/unless}}
+
+    {{#if buckets}}
+      {{> newBucket}}
+      {{#each buckets}}
+      <div class="col">
+        <div class="card w-310">
+          <div class="card-header">
+            <span class="badge text-bg-secondary"><i class="fa-solid fa-box"></i></span>
+          </div>
+          <div class="card-body">
+            <div class="d-flex flex-column justify-content-between">
+                <h5 class="card-title">{{name}}</h5>
+              <p class="card-text">{{description}}</p>
+              <a href="/buckets/{{_id}}/details" class="btn btn-primary btn-width">Details</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    {{/if}}
+  </div>
+</div>

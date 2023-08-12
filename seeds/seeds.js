@@ -75,9 +75,6 @@ const resources = [
     }
   ];
 
-console.log(buckets)
-console.log(resources)
-
 mongoose
   .connect(MONGO_URI)
   .then((x) => {
