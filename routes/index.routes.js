@@ -44,7 +44,6 @@ router.get("/feed/:tag", async (req, res, next) => {
     bucket['downVoteCount'] = bucket['downVote'].length
   })
   allBuckets['buttons'] = genreButtons
-  console.log(allBuckets)
   
   res.render("index", {buckets:allBuckets});
 });
