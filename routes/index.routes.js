@@ -9,27 +9,43 @@ const router = express.Router();
 
 /* GET home page */
 router.get("/", async (req, res, next) => {
-  const allBuckets = await Bucket.find().populate('owner').populate('resources')
-  allBuckets.forEach(bucket => {
-    bucket['newCreatedAt'] = moment(bucket['createdAt']).format('MM-DD-YYYY')
-    bucket['videoCount'] = bucket['resources'].length
-    bucket['upVoteCount'] = bucket['upVote'].length
-    bucket['downVoteCount'] = bucket['downVote'].length
-  })
-  res.render("index", {buckets:allBuckets});
+  // const allBuckets = await Bucket.find().populate('owner').populate('resources').sort({ upVote : 'desc'})
+  // allBuckets.forEach(bucket => {
+  //   bucket['newCreatedAt'] = moment(bucket['createdAt']).format('MM-DD-YYYY')
+  //   bucket['videoCount'] = bucket['resources'].length
+  //   bucket['upVoteCount'] = bucket['upVote'].length
+  //   bucket['downVoteCount'] = bucket['downVote'].length
+  // })
+  // res.render("index", {buckets:allBuckets});
+  res.redirect('/feed/all')
 });
 
 router.get("/feed/:tag", async (req, res, next) => {
-  const {tag} = req.params
-  console.log({tag})
+  let {tag} = req.params
+  let genreButtons = [{tag: 'All', href:'/', state: ''}, {tag: 'Business', href:'/feed/business', state: ''}, {tag: 'Lifestyle', href:'/feed/lifestyle', state: ''}, {tag: 'Food', href:'/feed/food', state: ''}, {tag: 'Arts', href:'/feed/arts', state: ''}, {tag: 'Music', href:'/feed/music', state: ''}, {tag: 'Health', href:'/feed/health', state: ''}]
+  for (let i=0; i<genreButtons.length; i++) {
+    if (genreButtons[i].tag.toUpperCase() === tag.toUpperCase()) {
+      genreButtons[i].state = 'active'
+    }
+  }
 
-  const allBuckets = await Bucket.find({tags: tag}).populate('owner').populate('resources')
+  if (tag === 'all') {
+    searchFilter = null
+  }
+  else {
+    searchFilter = {tags : tag}
+  }
+
+  const allBuckets = await Bucket.find(searchFilter).populate('owner').populate('resources').sort({ upVote : 'desc'})
   allBuckets.forEach(bucket => {
     bucket['newCreatedAt'] = moment(bucket['createdAt']).format('MM-DD-YYYY')
     bucket['videoCount'] = bucket['resources'].length
     bucket['upVoteCount'] = bucket['upVote'].length
     bucket['downVoteCount'] = bucket['downVote'].length
   })
+  allBuckets['buttons'] = genreButtons
+  console.log(allBuckets)
+  
   res.render("index", {buckets:allBuckets});
 });
 

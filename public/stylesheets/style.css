@@ -120,3 +120,60 @@
 p {
   margin: 0em;
 }
+
+#curated {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 'bold';
+}
+
+.btn.btn-info {
+  color: black;
+  background-color: #efefef;
+  border-style: none;
+  border-radius: 5px !important;
+  margin: 0px 15px;
+  font-size: 0.9em
+}
+.btn.btn-info:hover {
+  color: black;
+  background-color: #efefef;
+  border-style: none;
+  border-radius: 5px !important;
+  margin: 0px 15px;
+  font-size: 0.9em
+}
+.btn.btn-info:focus, .btn.btn-info.focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
+}
+.btn.btn-info.disabled, .btn.btn-info:disabled {
+  color: black;
+  background-color: #efefef;
+  border-style: none;
+  border-radius: 5px;
+  margin: 0px 15px;
+  font-size: 0.9em
+}
+.btn.btn-info:not(:disabled):not(.disabled):active,
+.btn.btn-info:not(:disabled):not(.disabled).active {
+  color: white;
+  background-color: rgb(112, 111, 111);
+  border-style: none;
+  border-radius: 5px;
+  margin: 0px 15px;
+  font-size: 0.9em
+}
+.show > .btn.btn-info.dropdown-toggle {
+  color: white;
+  background-color:rgb(112, 111, 111);
+  border-style: none;
+  border-radius: 5px;
+  margin: 0px 15px;
+  font-size: 0.9em
+}
+.show > .btn.btn-info.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
+}
+.btn.btn-info:not(:disabled):not(.disabled):active:focus,
+.btn.btn-info:not(:disabled):not(.disabled).active:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
+}

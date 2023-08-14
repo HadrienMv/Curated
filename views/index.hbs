@@ -23,68 +23,17 @@
     </h3>
 </section> --}}
 
-<section class="container-fluid py-4 border-top border-dark-subtle border-1">
-    <div class="row d-flex justify-content-around">
-        <div class="col-1 py-0">
-            <div class="text-center" style="margin-bottom: 12px;">
-                <a style="text-decoration: none; color: black;" href="/">
-                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(0, 0, 0, 0.445);">
-                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://cdn.icon-icons.com/icons2/1856/PNG/512/all-inclusive_116777.png" alt="Everything">
-                        <p style="font-size: 0.8em;">Everything</p>
-                    </div>
-                </a>
-            </div>
-            <div style="margin-bottom: 12px;">
-                <a style="text-decoration: none; color: black;" href="/feed/lifestyle">
-                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(0, 128, 128, 0.534);">
-                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://www.pngkit.com/png/full/429-4291169_lifestyle-icon-icon.png" alt="Lifestyle">
-                        <p style="font-size: 0.8em;">Lifestyle</p>
-                    </div>
-                </a>
-            </div>
-            <div style="margin-bottom: 12px;">
-                <a style="text-decoration: none; color: black;" href="/feed/health">
-                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(0, 0, 255, 0.479);">
-                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://www.nicepng.com/png/detail/799-7998911_placeholder-health-icons-png.png" alt="Health">
-                        <p style="font-size: 0.8em;">Health</p>
-                    </div>
-                </a>
-            </div>
-            <div style="margin-bottom: 12px;">
-                <a style="text-decoration: none; color: black;" href="/feed/music">
-                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(255, 255, 0, 0.5);">
-                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/2048px-Apple_Music_icon.svg.png" alt="Music">
-                        <p style="font-size: 0.8em;">Music</p>
-                    </div>
-                </a>
-            </div>
-            <div style="margin-bottom: 12px;">
-                <a style="text-decoration: none; color: black;" href="/feed/business">
-                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(238, 130, 238, 0.518);">
-                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://cdn-icons-png.flaticon.com/512/1933/1933920.png" alt="Business">
-                        <p style="font-size: 0.8em;">Business</p>
-                    </div>
-                </a>
-            </div>
-            <div style="margin-bottom: 12px;">
-                <a style="text-decoration: none; color: black;" href="/feed/food">
-                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(165, 42, 42, 0.6);">
-                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/orange_travelpictdinner_1484336833.png" alt="Food">
-                        <p style="font-size: 0.8em;">Food</p>
-                    </div>
-                </a>
-            </div>
-            <div style="margin-bottom: 12px;">
-                <a style="text-decoration: none; color: black;" href="/feed/arts">
-                    <div class="text-center py-2 px-2 bg-body-tertiary border border-secondary" style="border-radius: 10px; box-shadow: 8px 5px rgba(0, 128, 0, 0.566);">
-                        <img class="img px-3 mb-1" style="width: 100%; height: 25px;" src="https://www.clipartmax.com/png/middle/144-1445812_download-icon-art-and-culture-png.png" alt="Arts">
-                        <p style="font-size: 0.8em;">Arts</p>
-                    </div>
-                </a>
-            </div>
+<section class="container-fluid">
+    <div class="row position-fixed text-center  mt-2 py-3" style="width: 100%;">
+        <div class="btn-group d-flex text-center justify-content-between" data-toggle="button">
+            {{#each buckets.buttons}}
+                <a href="{{href}}" type="button" class="btn btn-info {{state}}">{{tag}}</a>
+            {{/each}}
         </div>
-        <div class="col-11">
-            <div class="row d-flex justify-content-around">
+    </div>
+    <div class="row mt-5 pt-5">
+        <div class="col-12 mt-4 pt-2 px-3">
+            <div class="row d-flex justify-content-between g-0">
                 {{#each buckets}}
                 <div class="card-fluid mb-4 px-0" style="width: 31%;">
                     <div class="card-body">
@@ -99,7 +48,7 @@
                             </div>
                             <div class="col-10 py-1 px-2">
                                 <div class="row">
-                                    <h5 class="card-title"><a href="/buckets/{{_id}}/details" style="text-decoration: none; color: black;">{{name}}</a></h5>
+                                    <h6 class="card-title"><a href="/buckets/{{_id}}/details" style="text-decoration: none; color: black;">{{name}}</a></h6>
                                 </div>
                                 <div class="row d-flex flex-row mt-1 align-items-center">
                                     <div class="col-8">
