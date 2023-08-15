@@ -16,7 +16,15 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 
     const userId = getCurrentUser(req);
 
-    const { bucketName, bucketDescription, resourceLink } = req.body
+    const { bucketName, bucketDescription, resourceLink} = req.body
+    
+    const bucketTags = ['Business', 'Lifestyle', 'Food', 'Arts', 'Music', 'Health']
+    let myTags = []
+    bucketTags.forEach(tag => {
+        if (req.body[tag] != undefined) {
+            myTags.push(tag.toLowerCase())
+        }
+    })
 
     if (isEmpty(bucketDescription) || isEmpty(bucketName) || isEmpty(resourceLink)) {
         const message = getMessage('None of the fields can be empty');
@@ -24,7 +32,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
     }
 
     if (!isLink(resourceLink)) {
-        const message = getMessage('Invalid link to resource');
+        const message = getMessage('Invalid link');
         res.render('buckets/new-bucket', { message })
     }
 
@@ -34,7 +42,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         thumbnail = getYouTubeThumbnailUrl(resourceLink)
 
         const newResource = await Resource.create({url, thumbnail});
-        const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, resources: [newResource._id], owner: userId });
+        const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, tags: myTags, resources: [newResource._id], owner: userId });
         const myUser = await User.findByIdAndUpdate(userId, {$push : {"buckets": newBucket}}, {new: true})
         const userBuckets = await getAllUserBuckets(userId);
         const message = getMessage(`${newBucket.name} created successfully`, 'success')
@@ -127,7 +135,6 @@ router.get("/all", isLoggedIn, async (req, res, next) => {
     const userId = getCurrentUser(req);
 
     try {
-
         const buckets = await getAllUserBuckets(userId);
         res.render('buckets/buckets', { buckets , active:'buckets'})
 
@@ -180,7 +187,7 @@ router.get('/:bucketId/downvote', isLoggedIn, async (req, res, next) => {
 })
 
 const getAllUserBuckets = (userId) => {
-    return Bucket.find({ owner: userId })
+    return Bucket.find({ owner: userId }).populate('resources')
 }
 
 const getCurrentUser = (req) => {
