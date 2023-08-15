@@ -16,9 +16,9 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 
     const userId = getCurrentUser(req);
 
-    const { bucketName, bucketDescription, resourceName, resourceLink, isText } = req.body
+    const { bucketName, bucketDescription, resourceLink } = req.body
 
-    if (isEmpty(bucketDescription) || isEmpty(bucketName) || isEmpty(resourceLink) || isEmpty(resourceName)) {
+    if (isEmpty(bucketDescription) || isEmpty(bucketName) || isEmpty(resourceLink)) {
         const message = getMessage('None of the fields can be empty');
         res.render('buckets/new-bucket', { message })
     }
@@ -29,15 +29,11 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
     }
 
     try {
-        const type = !isText ? 'video' : 'text'
         let url = resourceLink;
+        url = getYouTubeEmbedUrl(resourceLink);
+        thumbnail = getYouTubeThumbnailUrl(resourceLink)
 
-        if (!isText) {
-            url = getYouTubeEmbedUrl(resourceLink);
-            thumbnailUrl = getYouTubeThumbnailUrl(resourceLink)
-        }
-
-        const newResource = await Resource.create({ title: resourceName, url, type, thumbnail: thumbnailUrl});
+        const newResource = await Resource.create({url, thumbnail});
         const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, resources: [newResource._id], owner: userId });
         const myUser = await User.findByIdAndUpdate(userId, {$push : {"buckets": newBucket}}, {new: true})
         const userBuckets = await getAllUserBuckets(userId);

@@ -24,14 +24,14 @@
 </section> --}}
 
 <section class="container-fluid">
-    <div class="row position-fixed text-center bg-light mt-2 pt-3 pb-2" style="width: 100%;">
+    <div class="row position-fixed text-center py-3" style="width: 100%; top: 63px; background-color: white;">
         <div class="btn-group d-flex text-center justify-content-between align-items-center" data-toggle="button">
             {{#each buckets.buttons}}
-                <a href="{{href}}" type="button" class="btn btn-info {{state}}">{{tag}}</a>
+                <a href="{{href}}" type="button" class="btn btn-info mx-2 {{state}}">{{tag}}</a>
             {{/each}}
         </div>
     </div>
-    <div class="row mt-5 pt-5">
+    <div class="row" style="margin-top: 100px;">
         <div class="col-12 mt-4 pt-2 px-3">
             <div class="row d-flex justify-content-around g-0">
                 {{#each buckets}}
@@ -44,7 +44,7 @@
                         </div>
                         <div class="row px-3">
                             <div class="col-2 text-end p-1">
-                                <img src="{{owner.profilePic}}" class="img-fluid" style="border-radius: 50px; width: 80%;" alt="...">
+                                <img src="{{owner.profilePic}}" class="img-fluid" style="height: 45px; width: 45px; border-radius:50%; object-fit: cover;" alt="...">
                             </div>
                             <div class="col-10 py-1 px-2">
                                 <div class="row">
