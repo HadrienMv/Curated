@@ -52,7 +52,12 @@ router.get('/:bucketId/details', isLoggedIn, async (req, res) => {
     const { bucketId } = req.params
     try {
         const bucket = await Bucket.findById(bucketId).populate('resources');
-        res.render('buckets/bucket-details', {bucket, active:'buckets'})
+        const currentUser = getCurrentUser(req);
+        if(currentUser.id === bucket.owner){
+            res.render('buckets/bucket-details', {bucket, active:'buckets'})
+        }else{
+            res.render('buckets/bucket-details-view', {bucket, active:'buckets'})
+        }
     } catch (error) {
         const message = getMessage(error);
         res.render('buckets/buckets', { message, active:'buckets'})
