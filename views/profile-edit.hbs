@@ -6,25 +6,25 @@
         <div class="card p-4" style="border-radius: 15px;">
           <div class="card-body">
             <div class="d-flex align-items-top pb-2 text-black">
-              <div class="col-2 flex-shrink-0 me-2">
+              <div class="col-2 mx-0 flex-shrink-0">
                 <img src={{profilePic}}
-                  alt="User profile picture" class="img-fluid"
-                  style="width: 180px; border-radius: 100px;">
+                  alt="User profile picture" class="img"
+                  style="height: 140px; width: 140px; border-radius:50%; object-fit: cover;">
               </div>
-              <div class="col-12 flex-grow-1 ms-3">
+              <div class="col-9 ms-3">
                 <h5 class="mb-1">{{username}}</h5>
                 <p class="mb-2 pb-1" style="color: #2b2a2a;">Member since {{newCreatedAt}}</p>
-                <section class="d-flex justify-content-start align-items-top">
-                    <div class="flex-grow-0 me-2">
+                <section class="d-flex justify-content-start align-items-start">
+                    <div class="col-7 me-2">
                         <div class="d-flex justify-content-start align-items-stretch rounded-3 p-2"
                     style="background-color: #efefef;">
-                            <div class="col-10">
+                            <div>
                                 <p class="small text-muted my-0">About me</p>
                                 <textarea name="aboutMe" class="form-control mb-0 mt-1 text-primary" cols="35" rows="2">{{aboutMe}}</textarea>
                             </div>
                         </div>
                     </div>
-                    <div class="col-4 mx-2">
+                    <div class="col-3 me-2">
                         <div class="d-flex justify-content-between align-items-center rounded-3 p-2"
                     style="background-color: #efefef;">
                             <div>

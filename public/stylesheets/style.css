@@ -105,10 +105,6 @@
   width: 90px;
 }
 
-.expand-card {
-
-}
-
 .bucket-action {
   gap:15px;
 }
@@ -144,7 +140,7 @@ p {
   background-color: #efefef;
   border-style: none;
   border-radius: 5px !important;
-  margin: 0px 15px;
+
   font-size: 0.9em
 }
 .btn.btn-info:hover {
@@ -152,7 +148,7 @@ p {
   background-color: #efefef;
   border-style: none;
   border-radius: 5px !important;
-  margin: 0px 15px;
+
   font-size: 0.9em
 }
 .btn.btn-info:focus, .btn.btn-info.focus {
@@ -163,7 +159,6 @@ p {
   background-color: #efefef;
   border-style: none;
   border-radius: 5px;
-  margin: 0px 15px;
   font-size: 0.9em
 }
 .btn.btn-info:not(:disabled):not(.disabled):active,
@@ -172,7 +167,6 @@ p {
   background-color: rgb(112, 111, 111);
   border-style: none;
   border-radius: 5px;
-  margin: 0px 15px;
   font-size: 0.9em
 }
 .show > .btn.btn-info.dropdown-toggle {
@@ -180,7 +174,6 @@ p {
   background-color:rgb(112, 111, 111);
   border-style: none;
   border-radius: 5px;
-  margin: 0px 15px;
   font-size: 0.9em
 }
 .show > .btn.btn-info.dropdown-toggle:focus {
@@ -209,7 +202,6 @@ p {
 
 }
 
-
 .details {
   height: 125px;
 }
@@ -221,8 +213,6 @@ p {
   justify-content: flex-start;
   padding-top: 40px;
 }
-
-
 
 .bucket-details {
   min-height: 20%;
