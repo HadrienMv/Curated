@@ -2,7 +2,7 @@ const express = require('express');
 const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
 const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
-const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl } = require('./utils');
+const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getYouTubeThumbnailUrl } = require('./utils');
 const router = express.Router();
 
 
@@ -38,11 +38,12 @@ router.post('/:bucketId/add', async (req, res) => {
 
     if(!isText){
         url = getYouTubeEmbedUrl(link);
+        thumbnailUrl = getYouTubeThumbnailUrl(link)
     }
     
     const oldBucket = await Bucket.findById(bucketId);
     const bucketResources = oldBucket.resources;
-    const resource = await Resource.create({title, url, type});
+    const resource = await Resource.create({title, url, type, thumbnail: thumbnailUrl});
     const updatedResources = [resource._id, ...bucketResources]
     const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources:updatedResources}, {new: true}).populate('resources')
     const message = getMessage(`${resource.title} added successfully`,'success');

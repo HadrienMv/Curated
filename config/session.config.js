@@ -15,9 +15,9 @@ module.exports = app => {
         }),
       cookie: {
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production' ? true : false,
         httpOnly: true,
-        maxAge: 60 * 60 * 1000
+        maxAge: 48 * 60 * 60 * 1000
       }
     })
   );
