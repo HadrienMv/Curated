@@ -23,6 +23,15 @@ function getYouTubeEmbedUrl(videoUrl) {
   return null; // Invalid URL format
 }
 
+
+const getCurrentUser = (req) => {
+  if (!req.session.currentUser) {
+      return null
+  }
+
+  return req.session.currentUser._id;
+}
+
 function getYouTubeThumbnailUrl(videoUrl) {
   const videoIdRegex = /(?:\/embed\/|\/watch\?v=|v=|\/\d{1,2}\/|\/u\/\w\/|\/embed\/|\/v\/|\/e\/|\/watch\?v=|v=|\/d{1,2}\/|\/u\/\w\/|\/v\/|\/e\/)([^#\&\?]*).*/;
   const match = videoUrl.match(videoIdRegex);
@@ -37,5 +46,6 @@ module.exports = {
   isEmpty,
   isLink, 
   getYouTubeEmbedUrl,
+  getCurrentUser,
   getYouTubeThumbnailUrl
 }
