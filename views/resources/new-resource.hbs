@@ -1,31 +1,24 @@
-<div class="container register">
-  <div class="row">
+<div class="container-fluid register py-0 ps-5 pe-0">
+  <div class="row p-0" style="width:100%; height: 90%;">
     <div class="col-md-3 left-new">
-      <h3>Resource Details <i class="fa-solid fa-plus"></i></h3>
-      <p>Enter the details of the new resource.</p>
+      <img src="https://media.istockphoto.com/id/1208089610/vector/hand-holding-smartphone-watch-video-streaming-online-video-media-player-on-mobile-phone.jpg?s=612x612&w=0&k=20&c=Cwn8HnIsqyRJu_WmoqWgU7eR46HVaaCpwE5jsknSjek=" style="clip-path: inset(65px 0 65px 0); margin-top: -65px;" alt="">
+      <h3 style="font-family: 'Clash Display', sans-serif; margin-top: -65px;">Add a new video to your collection<i class="fa-solid fa-plus ms-2"></i></h3>
+      <p class="p-0 m-0">This collection is getting better and better...</p>
     </div>
     <div class="col-md-9 right bg-new">
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
           <form class="row gy-3 register-form" method="post" action="/resources/{{_id}}/add">
             <div class="col-md-8">
+              <h3 class="text-light" style="font-family: 'Clash Display', sans-serif;">Your Youtube find...</h3>
               <div class="form-group">
-                <input type="text" class="form-control" name="title" placeholder="Name of resource" value="" />
+                <input type="text" class="form-control" name="link" placeholder="Youtube video link" value="" />
               </div>
-              <div class="form-group">
-                <input type="text" class="form-control" name="link" placeholder="Resource link" value="" />
-                <div class="mt-3 d-flex justify-content-end form-check">
-                  <input type="checkbox" class="form-check-input mx-2" id="videoCheck" name="isText">
-                  <label class="form-check-label text-white" for="videoCheck">Text</label>
-                </div>
-              </div>
-
-              <input type="submit" class="custom-btn" value="Create" />
+              <input type="submit" class="custom-btn m-0" value="Add it!" />
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-
 </div>
