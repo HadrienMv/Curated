@@ -3,14 +3,43 @@ const moment = require('moment')
 const fileUploader = require('../config/cloudinary.config');
 const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
-const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
 const User = require('../models/User.model');
+const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
 const router = express.Router();
 
 /* GET home page */
 router.get("/", async (req, res, next) => {
-  const allBuckets = await Bucket.find()
-  res.render("index",{buckets:allBuckets, active:'home'});
+  // const allBuckets = await Bucket.find()
+  // res.render("index",{buckets:allBuckets, active:'home'});
+  res.redirect('/feed/all')
+});
+
+router.get("/feed/:tag", async (req, res, next) => {
+  let {tag} = req.params
+  let genreButtons = [{tag: 'All', href:'/', state: ''}, {tag: 'Business', href:'/feed/business', state: ''}, {tag: 'Lifestyle', href:'/feed/lifestyle', state: ''}, {tag: 'Food', href:'/feed/food', state: ''}, {tag: 'Arts', href:'/feed/arts', state: ''}, {tag: 'Music', href:'/feed/music', state: ''}, {tag: 'Health', href:'/feed/health', state: ''}]
+  for (let i=0; i<genreButtons.length; i++) {
+    if (genreButtons[i].tag.toUpperCase() === tag.toUpperCase()) {
+      genreButtons[i].state = 'active'
+    }
+  }
+
+  if (tag === 'all') {
+    searchFilter = null
+  }
+  else {
+    searchFilter = {tags : tag}
+  }
+
+  const allBuckets = await Bucket.find(searchFilter).populate('owner').populate('resources').sort({ upVote : 'desc'})
+  allBuckets.forEach(bucket => {
+    bucket['newCreatedAt'] = moment(bucket['createdAt']).format('MM-DD-YYYY')
+    bucket['videoCount'] = bucket['resources'].length
+    bucket['upVoteCount'] = bucket['upVote'].length
+    bucket['downVoteCount'] = bucket['downVote'].length
+  })
+  allBuckets['buttons'] = genreButtons
+  
+  res.render("index", {buckets:allBuckets});
 });
 
 // GET create buckets page
@@ -21,6 +50,7 @@ router.get("/create", isLoggedIn, async (req, res, next) => {
     res.redirect('/buckets/create')})
 })
 
+// GET profile page
 router.get('/profile', isLoggedIn, (req, res, next) => {
   User.findById(req.session.currentUser._id)
   .then(myUser => {
@@ -32,6 +62,7 @@ router.get('/profile', isLoggedIn, (req, res, next) => {
   })
 })
 
+// GET profile edit page
 router.get('/profile/edit', isLoggedIn, (req, res, next) => {
   User.findById(req.session.currentUser._id)
   .then(myUser => {
@@ -43,6 +74,7 @@ router.get('/profile/edit', isLoggedIn, (req, res, next) => {
   })
 })
 
+// POST profile edits
 router.post('/profile/edit', isLoggedIn, (req, res, next) => {
   const {email, interests, location, dob, aboutMe} = req.body
   const message = {
@@ -60,6 +92,7 @@ router.post('/profile/edit', isLoggedIn, (req, res, next) => {
   })
 })
 
+// POST profile picture update
 router.post('/update-picture', fileUploader.single('profilePic'), (req, res) => {
   User.findByIdAndUpdate(req.session.currentUser._id, {profilePic: req.file.path}, {new:true})
   .then(myUser => {
@@ -71,6 +104,7 @@ router.post('/update-picture', fileUploader.single('profilePic'), (req, res) => 
   })
 });
 
+// GET profile deletion modal
 router.get('/profile/delete', isLoggedIn, (req, res, next) => {
   User.findByIdAndDelete(req.session.currentUser._id)
   .then(result => {

@@ -1,8 +1,9 @@
 const express = require('express');
 const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
-const { isLoggedIn, isLoggedOut} = require('../middleware/route.guard');
-const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getCurrentUser } = require('./utils');
+const User = require('../models/User.model')
+const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
+const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getYouTubeThumbnailUrl } = require('./utils');
 const router = express.Router();
 
 //Display create form
@@ -33,13 +34,17 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 
         if (!isText) {
             url = getYouTubeEmbedUrl(resourceLink);
+            thumbnailUrl = getYouTubeThumbnailUrl(resourceLink)
         }
-        const newResource = await Resource.create({ title: resourceName, url, type });
+
+        const newResource = await Resource.create({ title: resourceName, url, type, thumbnail: thumbnailUrl});
         const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, resources: [newResource._id], owner: userId });
+        const myUser = await User.findByIdAndUpdate(userId, {$push : {"buckets": newBucket}}, {new: true})
         const userBuckets = await getAllUserBuckets(userId);
         const message = getMessage(`${newBucket.name} created successfully`, 'success')
 
         res.render('buckets/buckets', { message, buckets: userBuckets })
+        
     } catch (error) {
         const message = getMessage(error);
         res.render('buckets/new-bucket', { message })
@@ -136,9 +141,76 @@ router.get("/all", isLoggedIn, async (req, res, next) => {
     }
 });
 
+/* Upvote bucket */
+router.get('/:bucketId/upvote', isLoggedIn, async (req, res, next) => {
+    const {bucketId} =  req.params
+    const myUser = req.session.currentUser;
+
+    try {
+        const myTest = await checkHasVoted(bucketId, myUser)
+        console.log(myTest)
+
+        if (myTest) {
+            const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {$push : {"upVote": myUser}}, {new: true});
+            res.redirect('/')
+        }
+        res.redirect('/')
+        
+    }catch(error){
+        const message = getMessage(error);
+        console.log(message)
+    }
+})
+
+/* Downvote bucket */
+router.get('/:bucketId/downvote', isLoggedIn, async (req, res, next) => {
+    const {bucketId} =  req.params
+    const myUser = req.session.currentUser;
+
+    try {
+        const myTest = await checkHasVoted(bucketId, myUser)
+        console.log(myTest)
+
+        if (myTest) {
+            const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {$push : {"downVote": myUser}}, {new: true});
+            res.redirect('/')
+        }
+        res.redirect('/')
+        
+    }catch(error){
+        const message = getMessage(error);
+        console.log(message)
+    }
+})
 
 const getAllUserBuckets = (userId) => {
     return Bucket.find({ owner: userId })
+}
+
+const getCurrentUser = (req) => {
+    if (!req.session.currentUser) {
+        return null
+    }
+
+    return req.session.currentUser._id;
+}
+
+const checkHasVoted = async (bucketId, user) => {
+    const bucket = await Bucket.findById(bucketId)
+    const upvotes = getArrayOfIds(bucket.upVote)
+    const downvotes = getArrayOfIds(bucket.downVote)
+    if (upvotes.includes(user._id) || downvotes.includes(user._id)) {
+        return false
+    }
+    else {
+        return true
+    }
+}
+
+const getArrayOfIds = (objects) => {
+    const result = []
+    objects.forEach(object => result.push(object.toString()))
+    return result
 }
 
 module.exports = router;

@@ -2,9 +2,7 @@ const getMessage = (error, type = 'danger') => {
   if(typeof error === 'object'){
     return {type, content:error.message}
   }
-
   return {type, content:error}
-
 }
 
 const isEmpty = (value) => {
@@ -34,12 +32,20 @@ const getCurrentUser = (req) => {
   return req.session.currentUser._id;
 }
 
+function getYouTubeThumbnailUrl(videoUrl) {
+  const videoIdRegex = /(?:\/embed\/|\/watch\?v=|v=|\/\d{1,2}\/|\/u\/\w\/|\/embed\/|\/v\/|\/e\/|\/watch\?v=|v=|\/d{1,2}\/|\/u\/\w\/|\/v\/|\/e\/)([^#\&\?]*).*/;
+  const match = videoUrl.match(videoIdRegex);
+  if (match && match[1]) {
+      return `http://img.youtube.com/vi/${match[1]}/mqdefault.jpg`;
+  }
+  return null; // Invalid URL format
+}
 
 module.exports = {
   getMessage, 
   isEmpty,
   isLink, 
   getYouTubeEmbedUrl,
-  getCurrentUser
-
+  getCurrentUser,
+  getYouTubeThumbnailUrl
 }
