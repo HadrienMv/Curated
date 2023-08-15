@@ -190,3 +190,50 @@ p {
 .btn.btn-info:not(:disabled):not(.disabled).active:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
 }
+
+.bucket-list {
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px; /* Adjust as needed */
+  }
+  .card-body {
+    flex-grow: 1;
+  }
+  .card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+}
+
+
+.details {
+  height: 125px;
+}
+
+.bucket-left-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 40px;
+}
+
+
+
+.bucket-details {
+  min-height: 20%;
+}
+
+.bucket-details .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.text {
+  flex-grow: 1;
+}
