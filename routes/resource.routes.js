@@ -76,12 +76,13 @@ router.post('/:bucketId/:id/delete', async(req, res) => {
     bucket.resources.splice(resourceIndex, 1);
 
     // Save the updated bucket
-    const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources: bucket.resources})
+    const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources: bucket.resources}, {new:true}).populate('resources')
 
     // Delete the video document
     await Resource.findByIdAndDelete(id);
+    const message = getMessage('Video removed successfully', 'success')
 
-    res.render(`buckets/bucket-details`, {bucket: updatedBucket});
+    res.render(`buckets/bucket-details`, {bucket: updatedBucket, message});
   } catch (err) {
     const message = getMessage(err);
     res.render('buckets/details', {message, bucket});

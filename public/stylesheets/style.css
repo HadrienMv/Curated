@@ -215,7 +215,7 @@ p {
 }
 
 .bucket-details {
-  min-height: 20%;
+  min-height: 200px;
 }
 
 .bucket-details .card-body {
@@ -274,6 +274,10 @@ p {
   gap: 0.4rem;
   height: 100px;
   padding:10px;
+}
+.additional-videos.card a{
+  text-decoration: none;
+  color:inherit;
 }
 .additional-content.card-body{
   display:flex;

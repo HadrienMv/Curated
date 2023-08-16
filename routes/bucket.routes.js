@@ -52,8 +52,9 @@ router.get('/:bucketId/details', isLoggedIn, async (req, res) => {
     const { bucketId } = req.params
     try {
         const bucket = await Bucket.findById(bucketId).populate('resources');
-        const currentUser = getCurrentUser(req);
-        if(currentUser.id === bucket.owner){
+        const currentUserId = getCurrentUser(req);
+
+        if(currentUserId === bucket.owner.toString()){
             res.render('buckets/bucket-details', {bucket, active:'buckets'})
         }else{
             res.render('buckets/bucket-details-view', {bucket, active:'buckets'})
@@ -143,13 +144,12 @@ router.get("/all", isLoggedIn, async (req, res, next) => {
 });
 
 /* Upvote bucket */
-router.get('/:bucketId/upvote', isLoggedIn, async (req, res, next) => {
+router.get('/:bucketId/upvote ', isLoggedIn, async (req, res, next) => {
     const {bucketId} =  req.params
     const myUser = req.session.currentUser;
 
     try {
         const myTest = await checkHasVoted(bucketId, myUser)
-        console.log(myTest)
 
         if (myTest) {
             const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {$push : {"upVote": myUser}}, {new: true});
@@ -170,7 +170,6 @@ router.get('/:bucketId/downvote', isLoggedIn, async (req, res, next) => {
 
     try {
         const myTest = await checkHasVoted(bucketId, myUser)
-        console.log(myTest)
 
         if (myTest) {
             const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {$push : {"downVote": myUser}}, {new: true});

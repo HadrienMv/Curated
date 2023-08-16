@@ -1,89 +1,50 @@
-{{!-- <div class="container-fluid py-4">
-
-  <div class="row gx-5">
-    <div class="col-md-4">
-      <div class="bucket-left-container">
-        {{> bucketDetailCard bucket }}
-      </div>
-    </div>
+<div class="container-fluid py-5">
+  <div class="row">
     <div class="col-md-8">
-      <div class="buckets-right-container">
-        <div class="row">
-          <div class="col d-flex justify-content-center">
-            <p class="lead">Resource</p>
-          </div>
-        </div>
-        <div class="row" id="resourceCards">
-          {{#each bucket.resources}}
-          <div class="col-md-4">
-            <div class="row">
-              <div class="col">
-                <div class="card my-2 py-2">
-                  <div class="card-body">
-                    <div class="header-actions d-flex align-items-center justify-content-between">
-                      <h5 class="card-title pb-1">{{title}}</h5>
-                      <form action="/resources/{{../bucket._id}}/{{this._id}}/delete" method="post"
-                        class="max-height-35">
-                        <button class="btn btn-danger"> <i class="fa-solid fa-trash"></i></button>
-                      </form>
-                    </div>
-                    <div class="video-container">
-                      <div class="youtube-video">
-                        <iframe src="{{url}}" width="100%" frameborder="0" allowfullscreen="true"></iframe>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {{/each}}
+      <div class="d-flex justify-content-start">
+        <div class="d-flex flex-column">
+          <h2>{{bucket.name}}</h2>
+          <p>{{bucket.description}}</p>
         </div>
       </div>
     </div>
   </div>
-</div> --}}
 
-<div class="container-fluid">
   <div class="row">
     <div class="col-md-9">
       <div class="video-container mt-4">
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE" frameborder="0" allowfullscreen></iframe>
+        <iframe src="" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="playlist-container p-3">
-        <div class="additional-videos card" style="width: 100%;">
-          <img class="img-fluid" src="http://img.youtube.com/vi/mUE8vNsWtZw/mqdefault.jpg" alt=""
-            style="border-radius: 10px; width: 100%;">
+      <div class="playlist-container p-3" id="playlist">
+        {{#each bucket.resources}}
+        <div class="additional-videos card playlist-item" style="width: 100%;" data-video-id="{{url}}">
+          <img class="img-fluid" src="{{thumbnail}}" alt="Thumbnail" style="border-radius: 10px; width: 100%;">
           <div class="additional-content card-body">
-            <p class="card-title">Let's play a game which is long and fun</p>
+            <p class="card-title">{{title}}</p>
           </div>
         </div>
-        <div class="additional-videos card" style="width: 100%;">
-          <img class="img-fluid" src="http://img.youtube.com/vi/mUE8vNsWtZw/mqdefault.jpg" alt=""
-            style="border-radius: 10px; width: 100%;">
-          <div class="additional-content card-body">
-            <p class="card-title">Let's play a game </p>
-          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  <div class="row my-3">
+    <div class="col-md-1">
+          <div class="rounded-3 p-0 my-1" style="background-color: #efefef;">
+      <div class="row d-flex px-0 justify-content-center">
+        <div class="col-4 d-flex flex-row justify-content-center align-items-center py-1">
+          <a href="/buckets/{{bucket._id}}/upvote"><img style="width: 15px;"
+              src="https://cdn-icons-png.flaticon.com/512/0/193.png" alt=""></a>
+          <p class="ps-2" style="font-size: 0.7em;">{{bucket.upVote.length}}</p>
         </div>
-        <div class="additional-videos card" style="width: 100%;">
-          <img class="img-fluid" src="http://img.youtube.com/vi/mUE8vNsWtZw/mqdefault.jpg" alt=""
-            style="border-radius: 10px; width: 100%;">
-          <div class="additional-content card-body">
-            <p class="card-title">Let's play a game</p>
-          </div>
-        </div>
-        <div class="additional-videos card" style="width: 100%;">
-          <img class="img-fluid" src="http://img.youtube.com/vi/mUE8vNsWtZw/mqdefault.jpg" alt=""
-            style="border-radius: 10px; width: 100%;">
-          <div class="additional-content card-body">
-            <p class="card-title">Let's play a game which is long and fun Let's play a game which is long and fun Let's
-              play a game which is long and fun</p>
-          </div>
-
+        <div class="col-4 d-flex flex-row justify-content-center align-items-center py-1">
+          <a href="/buckets/{{bucket._id}}/downvote"><img style="width: 15px;"
+              src="https://cdn-icons-png.flaticon.com/512/25/25395.png" alt=""></a>
+          <p class="ps-2" style="font-size: 0.7em;">{{bucket.downVote.length}}</p>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </div>
