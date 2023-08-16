@@ -79,10 +79,10 @@ router.post('/:bucketId/:id/delete', async(req, res) => {
     // Delete the video document
     await Resource.findByIdAndDelete(id);
 
-    res.redirect(`buckets/${bucketId}/details`);
+    res.redirect(`/buckets/${bucketId}/details`);
   } catch (err) {
     const message = getMessage(err);
-    res.render('buckets/details', {message, bucket});
+    res.render('/buckets/details', {message, bucket});
   }
 })
 
