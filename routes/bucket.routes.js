@@ -3,7 +3,7 @@ const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
 const User = require('../models/User.model')
 const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
-const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getYouTubeThumbnailUrl } = require('./utils');
+const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getYouTubeThumbnailUrl, getYouTubeTitle} = require('./utils');
 const router = express.Router();
 
 //Display create form
@@ -32,8 +32,9 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         let url = resourceLink;
         url = getYouTubeEmbedUrl(resourceLink);
         thumbnail = getYouTubeThumbnailUrl(resourceLink)
+        videoTitle = getYouTubeTitle(resourceLink)
 
-        const newResource = await Resource.create({url, thumbnail});
+        const newResource = await Resource.create({url, thumbnail, videoTitle});
         const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, resources: [newResource._id], owner: userId });
         const myUser = await User.findByIdAndUpdate(userId, {$push : {"buckets": newBucket}}, {new: true})
         const userBuckets = await getAllUserBuckets(userId);
@@ -51,14 +52,9 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 router.get('/:bucketId/details', isLoggedIn, async (req, res) => {
     const { bucketId } = req.params
     try {
-        const bucket = await Bucket.findById(bucketId).populate('resources');
-        const currentUserId = getCurrentUser(req);
-
-        if(currentUserId === bucket.owner.toString()){
-            res.render('buckets/bucket-details', {bucket, active:'buckets'})
-        }else{
-            res.render('buckets/bucket-details-view', {bucket, active:'buckets'})
-        }
+        const bucket = await Bucket.findById(bucketId).populate('resources').populate('owner');
+        
+        res.render('buckets/bucket-details', {bucket, active:'buckets'})
     } catch (error) {
         const message = getMessage(error);
         res.render('buckets/buckets', { message, active:'buckets'})
@@ -180,6 +176,19 @@ router.get('/:bucketId/downvote', isLoggedIn, async (req, res, next) => {
     }catch(error){
         const message = getMessage(error);
         console.log(message)
+    }
+})
+
+// Bucket details 
+router.get('/:bucketId', async (req, res) => {
+    const { bucketId } = req.params
+    try {
+        const bucket = await Bucket.findById(bucketId).populate('resources').populate('owner');
+        
+        res.render('buckets/bucket-details-view', {bucket, active:'buckets'})
+    } catch (error) {
+        const message = getMessage(error);
+        res.render('buckets/buckets', { message, active:'buckets'})
     }
 })
 
