@@ -9,7 +9,8 @@ const router = express.Router();
 router.get('/:bucketId/add', isLoggedIn, async (req, res) => {
   const {bucketId} = req.params
   try{
-    const bucket = await Bucket.findById(bucketId);
+    const bucket = await Bucket.findById(bucketId).populate('resources');
+    bucket['videoCount'] = bucket.resources.length
     res.render('resources/new-resource', bucket)
   }catch(error){
     const message = getMessage(error);
@@ -20,35 +21,32 @@ router.get('/:bucketId/add', isLoggedIn, async (req, res) => {
 
 router.post('/:bucketId/add', async (req, res) => {
   const { bucketId } = req.params;
-  const { isText, link, title } = req.body
+  const { link } = req.body
 
-  if(isEmpty(title) || isEmpty(link)){
-    const message = getMessage('None of the fields can be empty');
+  if(isEmpty(link)){
+    const message = getMessage('The link field cannot be empty');
     res.render('resources/new-resource', {message, active: 'buckets'})
 }
 
   if (!isLink(link)) {
-    const message = getMessage('Invalid link to resource');
+    const message = getMessage('Invalid link');
     res.render('resources/new-resource', { message, active: 'buckets' })
   }
 
   try {
-    const type  = !isText ? 'video' : 'text'
     let url = link;
 
-    if(!isText){
-        url = getYouTubeEmbedUrl(link);
-        thumbnailUrl = getYouTubeThumbnailUrl(link)
-    }
+    url = getYouTubeEmbedUrl(link);
+    thumbnailUrl = getYouTubeThumbnailUrl(link)
     
     const oldBucket = await Bucket.findById(bucketId);
     const bucketResources = oldBucket.resources;
-    const resource = await Resource.create({title, url, type, thumbnail: thumbnailUrl});
+    const resource = await Resource.create({url, thumbnail: thumbnailUrl});
     const updatedResources = [resource._id, ...bucketResources]
-    const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources:updatedResources}, {new: true}).populate('resources')
-    const message = getMessage(`${resource.title} added successfully`,'success');
+    const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources:updatedResources}, {new: true})
+    const message = getMessage(`Video added successfully`,'success');
    
-    res.render('buckets/bucket-details', {bucket:updatedBucket, message, active: 'buckets'})
+    res.redirect(`/buckets/${bucketId}/details`)
   }
   catch (error) {
     const message = getMessage(error);

@@ -3,7 +3,7 @@
     <div class="col-md-3 left-new">
       <img style="clip-path: inset(40px 0 0 0)" src="https://img.freepik.com/premium-vector/video-editing-illustration-design-concept-illustration-websites-landing-pages-mobile-applications-posters-banners_108061-967.jpg?w=2000" alt="">
       <h3 style="font-family: 'Clash Display', sans-serif;">Update this collection<i class="fa-solid fa-plus ms-2"></i></h3>
-      <p>Making changes, one field at a time...</p>
+      <p>Make some changes, one field at a time...</p>
     </div>
     <div class="col-md-9 right bg-new">
       <div class="tab-content" id="myTabContent">
@@ -19,7 +19,10 @@
                 <p class="text-light mb-1">Description</p>
                 <textarea class="form-control text-primary" name="description" placeholder="Write the description">{{bucket.description}}</textarea>
               </div>
-              <input type="submit" class="custom-btn m-0" value="Update" />
+              <div class="d-flex flex-col justify-content-end">
+                <input type="submit" class="custom-btn m-0" value="Update Collection" />
+                <a class="btn px-5 py-2 ms-2 rounded-5 btn-secondary text-light" style="font-weight: 600;" href="/buckets/{{bucket._id}}/details">Cancel</a>
+              </div>
             </div>
           </form>
         </div>

@@ -3,18 +3,27 @@
     <div class="col-md-3 left-new">
       <img src="https://media.istockphoto.com/id/1208089610/vector/hand-holding-smartphone-watch-video-streaming-online-video-media-player-on-mobile-phone.jpg?s=612x612&w=0&k=20&c=Cwn8HnIsqyRJu_WmoqWgU7eR46HVaaCpwE5jsknSjek=" style="clip-path: inset(65px 0 65px 0); margin-top: -65px;" alt="">
       <h3 style="font-family: 'Clash Display', sans-serif; margin-top: -65px;">Add a new video to your collection<i class="fa-solid fa-plus ms-2"></i></h3>
-      <p class="p-0 m-0">This collection is getting better and better...</p>
+      <p class="p-0 m-0">This is getting better and better...</p>
     </div>
     <div class="col-md-9 right bg-new">
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
           <form class="row gy-3 register-form" method="post" action="/resources/{{_id}}/add">
             <div class="col-md-8">
-              <h3 class="text-light" style="font-family: 'Clash Display', sans-serif;">Your Youtube find...</h3>
+              <div class="d-flex flex-col justify-content-between align-items-center mb-4">
+                <img class="img me-3 rounded-1" style="height:50px;" src="{{resources.0.thumbnail}}" alt="">
+                <h6 class="text-light pe-5" style="font-family: 'Clash Display', sans-serif; ">Collection : {{name}}</h6>
+                <span class="badge bg-secondary" style="font-size: 0.75em;">{{videoCount}} VIDEO(S)</span>
+              </div>
+              
+              <h3 class="text-light" style="font-family: 'Clash Display', sans-serif;">Tell us what to add...</h3>
               <div class="form-group">
                 <input type="text" class="form-control" name="link" placeholder="Youtube video link" value="" />
               </div>
-              <input type="submit" class="custom-btn m-0" value="Add it!" />
+              <div class="d-flex flex-col justify-content-end">
+                <input type="submit" class="custom-btn m-0" value="Add to my collection" />
+                <a class="btn px-5 py-2 ms-2 rounded-5 btn-secondary text-light" style="font-weight: 600;" href="/buckets/{{_id}}/details">Cancel</a>
+              </div>
             </div>
           </form>
         </div>
