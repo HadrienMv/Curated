@@ -18,13 +18,15 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 
     const { bucketName, bucketDescription, resourceLink} = req.body
     
-    const bucketTags = ['Business', 'Lifestyle', 'Food', 'Arts', 'Music', 'Health']
+    const bucketTags = ['business', 'lifestyle', 'food', 'arts', 'music', 'health']
     let myTags = []
     bucketTags.forEach(tag => {
         if (req.body[tag] != undefined) {
             myTags.push(tag.toLowerCase())
         }
     })
+
+    console.log(myTags)
 
     if (isEmpty(bucketDescription) || isEmpty(bucketName) || isEmpty(resourceLink)) {
         const message = getMessage('None of the fields can be empty');
