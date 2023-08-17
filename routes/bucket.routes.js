@@ -101,7 +101,7 @@ router.post("/:bucketId/update", isLoggedIn, async (req, res) => {
 
 
 //Removing a bucket
-router.post('/:bucketId/delete', async(req, res) => {
+router.post('/:bucketId/delete', isLoggedIn, async(req, res) => {
     const {bucketId} = req.params
 
     const bucket = await Bucket.findById(bucketId).populate('resources');
@@ -140,18 +140,18 @@ router.get("/all", isLoggedIn, async (req, res, next) => {
 });
 
 /* Upvote bucket */
-router.get('/:bucketId/upvote ', isLoggedIn, async (req, res, next) => {
+router.get('/:bucketId/upvote', isLoggedIn, async (req, res, next) => {
     const {bucketId} =  req.params
     const myUser = req.session.currentUser;
 
     try {
         const myTest = await checkHasVoted(bucketId, myUser)
 
-        if (myTest) {
+        if (!myTest) {
             const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {$push : {"upVote": myUser}}, {new: true});
-            res.redirect('/')
+            res.redirect(req.originalUrl.slice(0, -7))
         }
-        res.redirect('/')
+        res.redirect(req.originalUrl.slice(0, -7))
         
     }catch(error){
         const message = getMessage(error);
@@ -167,11 +167,11 @@ router.get('/:bucketId/downvote', isLoggedIn, async (req, res, next) => {
     try {
         const myTest = await checkHasVoted(bucketId, myUser)
 
-        if (myTest) {
+        if (!myTest) {
             const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {$push : {"downVote": myUser}}, {new: true});
-            res.redirect('/')
+            res.redirect(req.originalUrl.slice(0, -9))
         }
-        res.redirect('/')
+        res.redirect(req.originalUrl.slice(0, -9))
         
     }catch(error){
         const message = getMessage(error);
@@ -209,10 +209,10 @@ const checkHasVoted = async (bucketId, user) => {
     const upvotes = getArrayOfIds(bucket.upVote)
     const downvotes = getArrayOfIds(bucket.downVote)
     if (upvotes.includes(user._id) || downvotes.includes(user._id)) {
-        return false
+        return true
     }
     else {
-        return true
+        return false
     }
 }
 
