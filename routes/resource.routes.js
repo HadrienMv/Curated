@@ -10,7 +10,8 @@ const router = express.Router();
 router.get('/:bucketId/add', isLoggedIn, async (req, res) => {
   const {bucketId} = req.params
   try{
-    const bucket = await Bucket.findById(bucketId);
+    const bucket = await Bucket.findById(bucketId).populate('resources');
+    bucket['videoCount'] = bucket.resources.length
     res.render('resources/new-resource', bucket)
   }catch(error){
     const message = getMessage(error);
@@ -29,7 +30,7 @@ router.post('/:bucketId/add', async (req, res) => {
 }
 
   if (!isLink(link)) {
-    const message = getMessage('Invalid link to resource');
+    const message = getMessage('Invalid link');
     res.render('resources/new-resource', { message, active: 'buckets' })
   }
 
@@ -45,10 +46,10 @@ router.post('/:bucketId/add', async (req, res) => {
     const bucketResources = oldBucket.resources;
     const resource = await Resource.create({url, thumbnail: thumbnailUrl, videoTitle});
     const updatedResources = [resource._id, ...bucketResources]
-    const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources:updatedResources}, {new: true}).populate('resources')
-    const message = getMessage(`${resource.title} added successfully`,'success');
+    const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources:updatedResources}, {new: true})
+    const message = getMessage(`Video added successfully`,'success');
    
-    res.render('buckets/bucket-details', {bucket:updatedBucket, message, active: 'buckets'})
+    res.redirect(`/buckets/${bucketId}/details`)
   }
   catch (error) {
     const message = getMessage(error);
@@ -82,10 +83,10 @@ router.post('/:bucketId/:id/delete', async(req, res) => {
     await Resource.findByIdAndDelete(id);
     const message = getMessage('Video removed successfully', 'success')
 
-    res.render(`buckets/bucket-details`, {bucket: updatedBucket, message});
+    res.redirect(`/buckets/${bucketId}/details`);
   } catch (err) {
     const message = getMessage(err);
-    res.render('buckets/details', {message, bucket});
+    res.render('/buckets/details', {message, bucket});
   }
 })
 
