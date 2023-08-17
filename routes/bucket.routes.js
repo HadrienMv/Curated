@@ -32,7 +32,8 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         let url = resourceLink;
         url = getYouTubeEmbedUrl(resourceLink);
         thumbnail = getYouTubeThumbnailUrl(resourceLink)
-        videoTitle = getYouTubeTitle(resourceLink)
+        videoTitle = await getYouTubeTitle(resourceLink)
+        console.log('video title ', videoTitle); 
 
         const newResource = await Resource.create({url, thumbnail, videoTitle});
         const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, resources: [newResource._id], owner: userId });
@@ -140,7 +141,7 @@ router.get("/all", isLoggedIn, async (req, res, next) => {
 });
 
 /* Upvote bucket */
-router.get('/:bucketId/upvote ', isLoggedIn, async (req, res, next) => {
+router.get('/:bucketId/upvote', isLoggedIn, async (req, res, next) => {
     const {bucketId} =  req.params
     const myUser = req.session.currentUser;
 

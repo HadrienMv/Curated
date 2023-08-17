@@ -38,7 +38,8 @@ router.post('/:bucketId/add', async (req, res) => {
     
     url = getYouTubeEmbedUrl(link);
     thumbnailUrl = getYouTubeThumbnailUrl(link)
-    videoTitle = getYouTubeTitle(link)
+    videoTitle = await getYouTubeTitle(link)
+    console.log('title of video ', videoTitle);
     
     const oldBucket = await Bucket.findById(bucketId);
     const bucketResources = oldBucket.resources;
