@@ -2,10 +2,11 @@ const express = require('express');
 const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
 const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
-const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getYouTubeThumbnailUrl } = require('./utils');
+const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getYouTubeThumbnailUrl, getYouTubeTitle } = require('./utils');
 const router = express.Router();
 
 
+// Page for adding a resource to a bucket
 router.get('/:bucketId/add', isLoggedIn, async (req, res) => {
   const {bucketId} = req.params
   try{
@@ -18,7 +19,7 @@ router.get('/:bucketId/add', isLoggedIn, async (req, res) => {
   }
 })
 
-
+// Adding a resource to a bucket
 router.post('/:bucketId/add', async (req, res) => {
   const { bucketId } = req.params;
   const { link } = req.body
@@ -35,13 +36,15 @@ router.post('/:bucketId/add', async (req, res) => {
 
   try {
     let url = link;
-
+    
     url = getYouTubeEmbedUrl(link);
     thumbnailUrl = getYouTubeThumbnailUrl(link)
+    videoTitle = await getYouTubeTitle(link)
+    console.log('title of video ', videoTitle);
     
     const oldBucket = await Bucket.findById(bucketId);
     const bucketResources = oldBucket.resources;
-    const resource = await Resource.create({url, thumbnail: thumbnailUrl});
+    const resource = await Resource.create({url, thumbnail: thumbnailUrl, videoTitle});
     const updatedResources = [resource._id, ...bucketResources]
     const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources:updatedResources}, {new: true})
     const message = getMessage(`Video added successfully`,'success');
@@ -74,10 +77,11 @@ router.post('/:bucketId/:id/delete', async(req, res) => {
     bucket.resources.splice(resourceIndex, 1);
 
     // Save the updated bucket
-    const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources: bucket.resources}, {new: true})
+    const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {resources: bucket.resources}, {new:true}).populate('resources')
 
     // Delete the video document
     await Resource.findByIdAndDelete(id);
+    const message = getMessage('Video removed successfully', 'success')
 
     res.redirect(`/buckets/${bucketId}/details`);
   } catch (err) {

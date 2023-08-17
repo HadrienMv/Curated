@@ -8,7 +8,7 @@ const resourceSchema = new Schema(
     },
     url: String,
     thumbnail: String,
-    review: String
+    videoTitle: String
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

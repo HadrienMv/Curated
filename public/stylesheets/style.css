@@ -215,7 +215,7 @@ p {
 }
 
 .bucket-details {
-  min-height: 20%;
+  min-height: 200px;
 }
 
 .bucket-details .card-body {
@@ -226,4 +226,75 @@ p {
 
 .text {
   flex-grow: 1;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.playlist-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.playlist-item.active {
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+.playlist-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+.playlist-thumbnail {
+  flex: 0 0 80px;
+  margin-right: 10px;
+}
+.playlist-title {
+  flex: 1;
+}
+.additional-videos.card{
+  display: grid;
+  grid-template-columns: 45% 55%;
+  grid-template-rows: 1fr;
+  gap: 0.4rem;
+  height: 100px;
+  padding:10px;
+}
+.additional-videos.card a{
+  text-decoration: none;
+  color:inherit;
+}
+.additional-content.card-body{
+  display:flex;
+  flex-direction:column;
+  padding:5px;
+  justify-content:flex-start;
+  overflow:hidden;
+
+}
+.additional-content.card-body .card-title{
+  font-size:1rem;
+  padding:0px;
+  margin: 0px;
+}
+
+.header-actions .card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

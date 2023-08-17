@@ -3,7 +3,7 @@ const Bucket = require('../models/Bucket.model');
 const Resource = require('../models/Resource.model');
 const User = require('../models/User.model')
 const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
-const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getYouTubeThumbnailUrl } = require('./utils');
+const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getYouTubeThumbnailUrl, getYouTubeTitle} = require('./utils');
 const router = express.Router();
 
 //Display create form
@@ -40,8 +40,10 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         let url = resourceLink;
         url = getYouTubeEmbedUrl(resourceLink);
         thumbnail = getYouTubeThumbnailUrl(resourceLink)
+        videoTitle = await getYouTubeTitle(resourceLink)
+        console.log('video title ', videoTitle); 
 
-        const newResource = await Resource.create({url, thumbnail});
+        const newResource = await Resource.create({url, thumbnail, videoTitle});
         const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, tags: myTags, resources: [newResource._id], owner: userId });
         const myUser = await User.findByIdAndUpdate(userId, {$push : {"buckets": newBucket}}, {new: true})
         const userBuckets = await getAllUserBuckets(userId);
@@ -59,7 +61,8 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 router.get('/:bucketId/details', isLoggedIn, async (req, res) => {
     const { bucketId } = req.params
     try {
-        const bucket = await Bucket.findById(bucketId).populate('resources');
+        const bucket = await Bucket.findById(bucketId).populate('resources').populate('owner');
+        
         res.render('buckets/bucket-details', {bucket, active:'buckets'})
     } catch (error) {
         const message = getMessage(error);
@@ -107,7 +110,7 @@ router.post("/:bucketId/update", isLoggedIn, async (req, res) => {
 
 
 //Removing a bucket
-router.post('/:bucketId/delete', async(req, res) => {
+router.post('/:bucketId/delete', isLoggedIn, async(req, res) => {
     const {bucketId} = req.params
 
     const bucket = await Bucket.findById(bucketId).populate('resources');
@@ -151,13 +154,12 @@ router.get('/:bucketId/upvote', isLoggedIn, async (req, res, next) => {
 
     try {
         const myTest = await checkHasVoted(bucketId, myUser)
-        console.log(myTest)
 
-        if (myTest) {
+        if (!myTest) {
             const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {$push : {"upVote": myUser}}, {new: true});
-            res.redirect('/')
+            res.redirect(req.originalUrl.slice(0, -7))
         }
-        res.redirect('/')
+        res.redirect(req.originalUrl.slice(0, -7))
         
     }catch(error){
         const message = getMessage(error);
@@ -172,17 +174,29 @@ router.get('/:bucketId/downvote', isLoggedIn, async (req, res, next) => {
 
     try {
         const myTest = await checkHasVoted(bucketId, myUser)
-        console.log(myTest)
 
-        if (myTest) {
+        if (!myTest) {
             const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {$push : {"downVote": myUser}}, {new: true});
-            res.redirect('/')
+            res.redirect(req.originalUrl.slice(0, -9))
         }
-        res.redirect('/')
+        res.redirect(req.originalUrl.slice(0, -9))
         
     }catch(error){
         const message = getMessage(error);
         console.log(message)
+    }
+})
+
+// Bucket details 
+router.get('/:bucketId', async (req, res) => {
+    const { bucketId } = req.params
+    try {
+        const bucket = await Bucket.findById(bucketId).populate('resources').populate('owner');
+        
+        res.render('buckets/bucket-details-view', {bucket, active:'buckets'})
+    } catch (error) {
+        const message = getMessage(error);
+        res.render('buckets/buckets', { message, active:'buckets'})
     }
 })
 
@@ -203,10 +217,10 @@ const checkHasVoted = async (bucketId, user) => {
     const upvotes = getArrayOfIds(bucket.upVote)
     const downvotes = getArrayOfIds(bucket.downVote)
     if (upvotes.includes(user._id) || downvotes.includes(user._id)) {
-        return false
+        return true
     }
     else {
-        return true
+        return false
     }
 }
 
