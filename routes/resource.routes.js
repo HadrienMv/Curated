@@ -11,8 +11,14 @@ router.get('/:bucketId/add', isLoggedIn, async (req, res) => {
   const {bucketId} = req.params
   try{
     const bucket = await Bucket.findById(bucketId).populate('resources');
-    bucket['videoCount'] = bucket.resources.length
-    res.render('resources/new-resource', bucket)
+    if (req.session.currentUser._id === bucket.owner._id.toString()) {
+      bucket['videoCount'] = bucket.resources.length
+      res.render('resources/new-resource', bucket)
+    }
+    else {
+      res.redirect('/feed/all')
+    }
+    
   }catch(error){
     const message = getMessage(error);
     res.render('resources/new-resource', {message, active: 'buckets'});
