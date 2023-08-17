@@ -28,7 +28,7 @@ const userSchema = new Schema(
     },
     aboutMe: String,
     interests: {
-      type: [String]
+      type: String
     },
     location: {
       type: String

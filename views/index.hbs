@@ -1,48 +1,68 @@
-<section class="container-fluid text-center py-5 bg-primary-subtle border-top border-primary border-3">
-    <h3>Today learn how to...<span>
-            <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active text-danger"  data-bs-interval="2000">
-                    Cook
-                    </div>
-                    <div class="carousel-item text-primary"  data-bs-interval="2000">
-                    Work smarter
-                    </div>
-                    <div class="carousel-item text-success"  data-bs-interval="2000">
-                    Get inspired
-                    </div>
-                    <div class="carousel-item text-warning"  data-bs-interval="2000">
-                    Play guitar
-                    </div>
-                    <div class="carousel-item text-info">
-                    Be healthier
+<section class="container-fluid">
+    <div class="row position-fixed text-center py-3" style="width: 100%; top: 63px; background-color: white;">
+        <div class="btn-group d-flex text-center justify-content-between align-items-center" data-toggle="button">
+            {{#each buckets.buttons}}
+            <a href="{{href}}" type="button" class="btn btn-info mx-2 {{state}}">{{tag}}</a>
+            {{/each}}
+        </div>
+    </div>
+    <div class="row" style="margin-top: 100px;">
+        <div class="col-12 mt-4 pt-2 px-3">
+            <div class="row d-flex justify-content-around g-0">
+                {{#each buckets}}
+                <div class="card-fluid mb-4 px-0" style="width: 31%;">
+                    <div class="card-body">
+                        <div class="row mb-2 d-flex justify-content-start px-0 mx-0">
+                            <div class="col z-index-n1">
+                                <a href="/buckets/{{_id}}"><img class="img-fluid" src="{{resources.0.thumbnail}}" alt="" style="border-radius: 20px; width: 100%;"></a>
+                            </div>
+                        </div>
+                        <div class="row px-3">
+                            <div class="col-2 text-end p-1">
+                                <img src="{{owner.profilePic}}" class="img-fluid"
+                                    style="height: 45px; width: 45px; border-radius:50%; object-fit: cover;" alt="...">
+                            </div>
+                            <div class="col-10 py-1 px-2">
+                                <div class="row">
+                                    <h6 class="card-title"><a href="/buckets/{{_id}}"
+                                            style="text-decoration: none; color: black;">{{name}}</a></h6>
+                                </div>
+                                <div class="row d-flex flex-row mt-2">
+                                    <div class="col-8">
+                                        <div class="d-flex flex-row justify-content-start align-items-center">
+                                            <p class="text-secondary-emphasis" style="font-size: 0.8em; font-weight: 600;">{{owner.username}}</p>
+                                        </div>
+                                        <p class="text-secondary small pt-0 mt-0" style="font-size: 0.8em;"><span>Shared on </span>{{newCreatedAt}}</p>
+                                    </div>
+                                    <div class="col-4 ps-0 text-end pt-0">
+                                        <span class="badge bg-secondary" style="font-size: 0.75em;">{{videoCount}}
+                                            VIDEO(S)</span>
+                                        <div class="rounded-3 p-0 my-1" style="background-color: #efefef;">
+                                            <div class="row d-flex px-0 justify-content-center">
+                                                <div
+                                                    class="col-4 d-flex flex-row justify-content-center align-items-center py-1">
+                                                    <a href="/buckets/{{_id}}/upvote"><img style="width: 15px;"
+                                                            src="https://cdn-icons-png.flaticon.com/512/0/193.png"
+                                                            alt=""></a>
+                                                    <p class="ps-2" style="font-size: 0.7em;">{{upVoteCount}}</p>
+                                                </div>
+                                                <div
+                                                    class="col-4 d-flex flex-row justify-content-center align-items-center py-1">
+                                                    <a href="/buckets/{{_id}}/downvote"><img style="width: 15px;"
+                                                            src="https://cdn-icons-png.flaticon.com/512/25/25395.png"
+                                                            alt=""></a>
+                                                    <p class="ps-2" style="font-size: 0.7em;">{{downVoteCount}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                {{/each}}
             </div>
-        </span>
-    </h3>
-
-</section>
-
-<section class="container-fluid py-5 px-4 border-top border-dark-subtle border-1">
-    <div class="row d-flex justify-content-around grid gap-3">
-        {{#each buckets}}
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <div class="row d-flex align-items-center">
-                        <div class="col">
-                            <img src="https://i0.wp.com/post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/03/GettyImages-1092658864_hero-1024x575.jpg?w=1155&h=1528" class="img-thumbnail" alt="...">
-                        </div>
-                        <div class="col">
-                            <h6 class="m-0 p-0">John</h6>
-                            <p class="text-secondary m-0 p-0" style="font-size: 0.7em;">Member since July 2023</p>
-                        </div>
-                    </div>
-                    <h6 class="card-title mt-3">{{name}}</h6>
-                    <p class="card-text" style="font-size: 0.8em;">{{description}}</p>
-                    <a href="#" class="btn btn-primary" style="font-size: 0.8em;">Discover</a>
-                </div>
-            </div>
-        {{/each}}
+        </div>
     </div>
 </section>

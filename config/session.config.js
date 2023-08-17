@@ -14,8 +14,8 @@ module.exports = app => {
         mongoUrl: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Curated",
         }),
       cookie: {
-        sameSite: 'none',
-        secure: true,
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        secure: process.env.NODE_ENV === 'production' ? true : false,
         httpOnly: true,
         maxAge: 48 * 60 * 60 * 1000
       }

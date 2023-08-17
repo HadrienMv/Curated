@@ -1,26 +1,37 @@
-<div class="card expand-card">
-  <div class="row g-0">
+<div class="container-fluid py-4">
+
+  <div class="row gx-5">
     <div class="col-md-4">
       <div class="bucket-left-container">
         {{> bucketDetailCard bucket }}
       </div>
     </div>
     <div class="col-md-8">
-      <div class="bucket-right-container">
+      <div class="buckets-right-container">
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <p class="lead">Resources</p>
+          </div>
+        </div>
         <div class="row" id="resourceCards">
           {{#each bucket.resources}}
-          <div class="col-md-4">
-            <div class="card my-5 py-2">
-              <div class="card-body">
-                <div class="header-actions d-flex align-items-center justify-content-between">
-                  <h5 class="card-title pb-1">{{title}}</h5>
-                  <form action="/resources/{{../bucket._id}}/{{this._id}}/delete" method="post" class="max-height-35">
-                    <button class="btn btn-danger"> <i class="fa-solid fa-trash"></i></button>
-                  </form>
-                </div>
-                <div class="video-container">
-                  <div class="youtube-video">
-                    <iframe src="{{url}}" width="100%" frameborder="0" allowfullscreen="true"></iframe>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col">
+                <div class="card my-2 py-2">
+                  <div class="card-body">
+                    <div class="header-actions d-flex align-items-center justify-content-between">
+                      <h5 class="card-title pb-1">{{videoTitle}}</h5>
+                      <form action="/resources/{{../bucket._id}}/{{this._id}}/delete" method="post"
+                        class="max-height-35">
+                        <button class="btn btn-danger"> <i class="fa-solid fa-trash"></i></button>
+                      </form>
+                    </div>
+                    <div class="video-container">
+                      <div class="youtube-video">
+                        <iframe src="{{url}}" width="100%" frameborder="0" allowfullscreen="true"></iframe>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -43,14 +54,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        Deleting the {{bucket.name}} will remove all the resources in the bucket
+        <p>Deleting the <span style="font-weight: bold;">{{bucket.name}}</span> collection will remove the entire collection and its videos.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <form action="/buckets/{{bucket._id}}/delete" method="post" class="max-height-35">
           <button type="submit" class="btn btn-danger">Delete</button>
         </form>
-
       </div>
     </div>
   </div>

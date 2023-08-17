@@ -8,54 +8,69 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/4a4282b57f.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary py-2">
+  <nav class="navbar navbar-expand-lg shadow-sm bg-body-tertiary py-1   fixed-top border-bottom">
     <div class="container-fluid">
-      <a class="navbar-brand fs-1 fw-bold ps-4 text-primary" href="/">CURATED</a>
+      <div class="d-flex flex-row ps-4 justify-content-center align-items-center">
+        <a href="/"><img style="height: 30px"
+            src="https://logodownload.org/wp-content/uploads/2014/10/youtube-logo-1-3.png" alt=""></a>
+        <a class="navbar-brand fs-5 ps-2 fw-bold text-primary" id="curated" href="/">CURATED</a>
+      </div>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="d-flex justify-content-end align-items-center" style="width: 100%;">
-          <div class="p-2 nav-item"><a class="nav-link active text-dark" aria-current="page" href="/">Home</a></div>
-          <div class="p-2 nav-item"><a href="/create"><button type="button" class="btn btn-primary">Create</button></a></div>
-          {{#if currentUser}}
-          <div class="p-2 nav-item"><a class="nav-link active" aria-current="page" href="/buckets/all">Buckets</a></div>
-          {{/if}}
+          <div class="d-flex justify-content-end small align-items-center" style="width: 100%;">
+            <div class="p-2 nav-item"><a class="nav-link active text-dark" aria-current="page" href="/">Home</a></div>
+            <div class="p-2 nav-item"><a href="/create"><button type="button"
+                  class="btn btn-primary">Create</button></a></div>
+            {{#if currentUser}}
+            <div class="p-2 nav-item"><a class="nav-link  {{isActive 'buckets'}}" aria-current="page"
+                href="/buckets/all">My shares</a></div>
 
-          <div class="p-2 nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Account
-            </a>
-            <ul class="dropdown-menu">
-              {{#if currentUser}}
-              <li><a class="dropdown-item" href="/logout">Log Out</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="/profile">Profile</a></li>
-              {{ else }}
-              <li><a class="dropdown-item" href="/login">Log In</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="/register">Register</a></li>
+            <div class="p-2 nav-item dropdown">
+              <img class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                src="{{currentUser.profilePic}}"
+                style="height: 40px; width: 40px; border-radius:50%; object-fit: cover;" alt="My profile">
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item small {{isActive 'profile'}}" href="/profile">Profile</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item small" href="/logout">Log Out</a></li>
+              </ul>
+            </div>
+            {{ else }}
+            <div class="p-2 nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Account
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item small" href="/login">Log In</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item small" href="/register">Register</a></li>
+              </ul>
               {{/if}}
-            </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   </nav>
 
-  {{#if message}}
-  <div class="row justify-content-center py-4 container">
-    <div class="toast align-items-center text-bg-{{message.type}} border-0 fade show" role="alert" aria-live="assertive"
-      aria-atomic="true">
+  <div style="margin-top: 63px;">
+    {{#if message}}
+    <div class="toast text-bg-{{message.type}} position-fixed border-0 fade show" role="alert" aria-live="assertive"
+      aria-atomic="true" style="margin-left: 36%; top: 80px; z-index: 1000;">
       <div class="d-flex">
         <div class="toast-body">
           {{message.content}}
@@ -66,13 +81,52 @@
     </div>
   </div>
   {{/if}}
-
   {{{body}}}
+  </div>
+
+
 
   <script src="/js/script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      console.log('running')
+      const playlist = document.getElementById('playlist');
+      console.log('playlist ', playlist);
+      const videoContainer = document.querySelector('.video-container iframe');
+      console.log('video contain ', videoContainer);
+
+      // Get the URL of the first video in the playlist
+      const firstPlaylistItem = playlist.querySelector('.playlist-item');
+       firstPlaylistItem.classList.add('active')
+      const firstVideoId = firstPlaylistItem.getAttribute('data-video-id');
+      const firstVideoUrl = `${firstVideoId}`;
+
+      // Set the initial video URL
+      videoContainer.src = firstVideoUrl;
+
+
+      // Click event handler for playlist items
+      playlist.addEventListener('click', async function (event) {
+        const playlistItem = event.target.closest('.playlist-item');
+        console.log('play item ', playlistItem)
+        if (playlistItem) {
+          const videoId = playlistItem.getAttribute('data-video-id');
+          console.log('attribute ', videoId)
+          videoContainer.src = `${videoId}`;
+
+          // Update active playlist item
+          const activeItem = playlist.querySelector('.playlist-item.active');
+          if (activeItem) {
+            activeItem.classList.remove('active');
+          }
+          playlistItem.classList.add('active');
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

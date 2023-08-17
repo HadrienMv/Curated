@@ -3,14 +3,12 @@ const { Schema, model } = require("mongoose");
 // TODO: Please make sure you edit the User model to whatever makes sense in this case
 const resourceSchema = new Schema(
   {
-    title: String,
-    type: String,
     rating: {
         type: Number
     },
     url: String,
     thumbnail: String,
-    review: String
+    videoTitle: String
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
