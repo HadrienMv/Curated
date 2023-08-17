@@ -100,6 +100,7 @@ router.post('/update-picture', fileUploader.single('profilePic'), (req, res) => 
     myUser['newDob'] = moment(myUser['dob']).format('YYYY-MM-DD')
     myUser['newCreatedAt'] = moment(myUser['createdAt']).format('MMMM YYYY')
     myUser['active']='profile'
+    req.session.currentUser.profilePic = req.file.path
     res.render('profile', myUser)
   })
 });

@@ -1,6 +1,6 @@
 <div class="container py-4">
   <div class="d-flex justify-content-center">
-    <h2><i class="fa-solid fa-list-ul"></i> <span>My shares</span></h2>
+    <h2><i class="fa-solid fa-list-ul"></i> <span>My shared collections</span></h2>
   </div>
   <div class="row gy-3 my-2 bucket-list">
     {{#if buckets}}
@@ -11,10 +11,13 @@
             <span class="badge text-bg-secondary"><i class="fa-solid fa-box"></i></span>
           </div>
           <div class="card-body">
-            <div class="d-flex flex-column justify-content-between details">
-                <h5 class="card-title">{{name}}</h5>
-              <p class="card-text">{{description}}</p>
-              <a href="/buckets/{{_id}}/details" class="btn btn-primary btn-width">Update</a>
+            <div class="row">
+              <a href="/buckets/{{_id}}/details"><img class="img-fluid" src="{{resources.0.thumbnail}}" style="border-radius: 20px; width: 100%;" alt=""></a>
+            </div>
+            <div class="row mt-2">
+              <h5 class="card-title px-3 py-0 mb-1">{{name}}</h5>
+              <p class="card-text px-3 py-0 mb-2">{{description}}</p>
+              <a href="/buckets/{{_id}}/details" class="btn btn-primary btn-width ms-3 p-1">Update</a>
             </div>
           </div>
         </div>

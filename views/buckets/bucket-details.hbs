@@ -15,13 +15,13 @@
         </div>
         <div class="row" id="resourceCards">
           {{#each bucket.resources}}
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="row">
               <div class="col">
                 <div class="card my-2 py-2">
                   <div class="card-body">
                     <div class="header-actions d-flex align-items-center justify-content-between">
-                      <h5 class="card-title pb-1">{{title}}</h5>
+                      <h5 class="card-title pb-1">{{videoTitle}}</h5>
                       <form action="/resources/{{../bucket._id}}/{{this._id}}/delete" method="post"
                         class="max-height-35">
                         <button class="btn btn-danger"> <i class="fa-solid fa-trash"></i></button>
@@ -54,7 +54,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        Deleting the {{bucket.name}} will remove all the resources in the bucket
+        <p>Deleting the <span style="font-weight: bold;">{{bucket.name}}</span> collection will remove the entire collection and its videos.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
