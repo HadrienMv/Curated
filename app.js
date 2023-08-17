@@ -30,7 +30,7 @@ require("./config/session.config")(app);
 const capitalize = require("./utils/capitalize");
 const projectName = "Curated";
 
-app.locals.appTitle = `${capitalize(projectName)} created with IronLauncher`;
+app.locals.appTitle = `${capitalize(projectName)}`;
 app.use((req, res, next) => {
     app.locals.currentUser = req.session.currentUser
     next()

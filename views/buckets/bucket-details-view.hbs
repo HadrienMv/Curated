@@ -62,3 +62,36 @@
     </div>
   </div>
 </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      const playlist = document.getElementById('playlist');
+      const videoContainer = document.querySelector('.video-container iframe');
+
+      // Get the URL of the first video in the playlist
+      const firstPlaylistItem = playlist.querySelector('.playlist-item');
+       firstPlaylistItem.classList.add('active')
+      const firstVideoId = firstPlaylistItem.getAttribute('data-video-id');
+      const firstVideoUrl = `${firstVideoId}`;
+
+      // Set the initial video URL
+      videoContainer.src = firstVideoUrl;
+
+
+      // Click event handler for playlist items
+      playlist.addEventListener('click', async function (event) {
+        const playlistItem = event.target.closest('.playlist-item');
+        if (playlistItem) {
+          const videoId = playlistItem.getAttribute('data-video-id');
+          videoContainer.src = `${videoId}`;
+
+          // Update active playlist item
+          const activeItem = playlist.querySelector('.playlist-item.active');
+          if (activeItem) {
+            activeItem.classList.remove('active');
+          }
+          playlistItem.classList.add('active');
+        }
+      });
+    });
+  </script>

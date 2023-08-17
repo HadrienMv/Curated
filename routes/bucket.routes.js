@@ -16,7 +16,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 
     const userId = getCurrentUser(req);
 
-    const { bucketName, bucketDescription, resourceLink} = req.body
+    const { bucketName, bucketDescription} = req.body
     
     const bucketTags = ['business', 'lifestyle', 'food', 'arts', 'music', 'health']
     let myTags = []
@@ -26,36 +26,23 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         }
     })
 
-    console.log(myTags)
-
-    if (isEmpty(bucketDescription) || isEmpty(bucketName) || isEmpty(resourceLink)) {
+    if (isEmpty(bucketDescription) || isEmpty(bucketName)) {
         const message = getMessage('None of the fields can be empty');
         res.render('buckets/new-bucket', { message })
     }
 
-    if (!isLink(resourceLink)) {
-        const message = getMessage('Invalid link');
-        res.render('buckets/new-bucket', { message })
-    }
-
     try {
-        let url = resourceLink;
-        url = getYouTubeEmbedUrl(resourceLink);
-        thumbnail = getYouTubeThumbnailUrl(resourceLink)
-        videoTitle = await getYouTubeTitle(resourceLink)
-        console.log('video title ', videoTitle); 
-
-        const newResource = await Resource.create({url, thumbnail, videoTitle});
-        const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, tags: myTags, resources: [newResource._id], owner: userId });
+        const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, tags: myTags, owner: userId });
         const myUser = await User.findByIdAndUpdate(userId, {$push : {"buckets": newBucket}}, {new: true})
         const userBuckets = await getAllUserBuckets(userId);
         const message = getMessage(`${newBucket.name} created successfully`, 'success')
 
-        res.render('buckets/buckets', { message, buckets: userBuckets })
+        res.redirect(`/resources/${newBucket._id}/add`)
         
     } catch (error) {
         const message = getMessage(error);
-        res.render('buckets/new-bucket', { message })
+        console.log(message);
+        res.render('buckets/new-bucket')
     }
 });
 
@@ -68,7 +55,8 @@ router.get('/:bucketId/details', isLoggedIn, async (req, res) => {
         res.render('buckets/bucket-details', {bucket, active:'buckets'})
     } catch (error) {
         const message = getMessage(error);
-        res.render('buckets/buckets', { message, active:'buckets'})
+        console.log(message)
+        res.render('buckets/buckets', { active:'buckets'})
     }
 })
 
@@ -82,8 +70,8 @@ router.get("/:bucketId/update", isLoggedIn, async (req, res) => {
         res.render("buckets/edit-bucket", {bucket, active:'buckets'})
     }catch(error){
         const message = getMessage(error);
-
-        res.render('buckets/bucket-details', {message, active:'buckets'})
+        console.log(message)
+        res.render('buckets/bucket-details', {active:'buckets'})
     }
 })
 
@@ -106,7 +94,8 @@ router.post("/:bucketId/update", isLoggedIn, async (req, res) => {
         res.render('buckets/bucket-details', {bucket: updatedBucket, message, active:'buckets'})
     }catch(error){
         const message = getMessage(error);
-        res.render('buckets/edit-bucket', { bucket:{name, description, _id:bucketId}, message, active:'buckets'})
+        console.log(message)
+        res.render('buckets/edit-bucket', { bucket:{name, description, _id:bucketId}, active:'buckets'})
     }
 });
 
@@ -130,7 +119,8 @@ router.post('/:bucketId/delete', isLoggedIn, async(req, res) => {
         res.redirect('/buckets/all');
       } catch (err) {
         const message = getMessage(err);
-        res.render('buckets/bucket-details', { bucket, message, active:'buckets' });
+        console.log(message)
+        res.render('buckets/bucket-details', { bucket, active:'buckets' });
       }
     
 })
@@ -198,7 +188,8 @@ router.get('/:bucketId', async (req, res) => {
         res.render('buckets/bucket-details-view', {bucket, active:'buckets'})
     } catch (error) {
         const message = getMessage(error);
-        res.render('buckets/buckets', { message, active:'buckets'})
+        console.log(message);
+        res.render('buckets/buckets', { active:'buckets'})
     }
 })
 
