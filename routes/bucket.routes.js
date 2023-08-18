@@ -142,6 +142,15 @@ router.post('/:bucketId/delete', isLoggedIn, async(req, res) => {
     
         // Delete the bucket
         await Bucket.findByIdAndDelete(bucketId)
+
+        // Update user profile
+        const user = await User.findById(req.session.currentUser._id)
+        for (let i=0; i<user.buckets.length; i++) {
+            if (user.buckets[i].toString() === bucketId) {
+                user.buckets.pop(i)
+            }
+        }
+        await User.findByIdAndUpdate(req.session.currentUser._id, {buckets: user.buckets}, {new: true})
     
         res.redirect('/buckets/all');
     } catch (err) {
