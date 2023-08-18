@@ -1,33 +1,108 @@
 <div class="container-fluid register py-0 ps-5 pe-0">
   <div class="row p-0" style="width:100%; height: 90%;">
     <div class="col-md-3 left-new">
-      <img src="https://media.istockphoto.com/id/1208089610/vector/hand-holding-smartphone-watch-video-streaming-online-video-media-player-on-mobile-phone.jpg?s=612x612&w=0&k=20&c=Cwn8HnIsqyRJu_WmoqWgU7eR46HVaaCpwE5jsknSjek=" style="clip-path: inset(65px 0 65px 0); margin-top: -65px;" alt="">
-      <h3 style="font-family: 'Clash Display', sans-serif; margin-top: -65px;">Add a new video to your collection<i class="fa-solid fa-plus ms-2"></i></h3>
+      <img
+        src="https://media.istockphoto.com/id/1208089610/vector/hand-holding-smartphone-watch-video-streaming-online-video-media-player-on-mobile-phone.jpg?s=612x612&w=0&k=20&c=Cwn8HnIsqyRJu_WmoqWgU7eR46HVaaCpwE5jsknSjek="
+        style="clip-path: inset(65px 0 65px 0); margin-top: -65px;" alt="">
+      <h3 style="font-family: 'Clash Display', sans-serif; margin-top: -65px;">Add a new video to your collection<i
+          class="fa-solid fa-plus ms-2"></i></h3>
       <p class="p-0 m-0">This is getting better and better...</p>
     </div>
     <div class="col-md-9 right bg-new">
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-          <form class="row gy-3 register-form" method="post" action="/resources/{{_id}}/add">
-            <div class="col-md-8">
-              <div class="d-flex flex-col justify-content-between align-items-center mb-4">
-                <img class="img me-3 rounded-1" style="height:50px;" src="{{resources.0.thumbnail}}" alt="">
-                <h6 class="text-light pe-5" style="font-family: 'Clash Display', sans-serif; ">Collection : {{name}}</h6>
-                <span class="badge bg-secondary" style="font-size: 0.75em;">{{videoCount}} VIDEO(S)</span>
+          <form id="videosForm" class="row register-form" method="post" action="/resources/{{bucket._id}}/add">
+            <div class="col-md-12">
+              <div class="row d-flex flex-col justify-content-between align-items-center mb-4">
+                <div class="d-flex flex-col justify-content-start align-items-center">
+                  {{#if bucket.resources}}
+                  <img class="img me-3 rounded-1" style="height:50px;" src="{{bucket.resources.0.thumbnail}}" alt="">
+                  {{/if}}
+                  <h6 class="text-light pe-5" style="font-family: 'Clash Display', sans-serif; ">Collection : {{bucket.name}}</h6>
+                  {{#if bucket.resources}}
+                  <span class="badge bg-secondary" style="font-size: 0.75em;">{{bucket.videoCount}} VIDEO(S)</span>
+                  {{/if}}
+                </div>
               </div>
-              
-              <h3 class="text-light" style="font-family: 'Clash Display', sans-serif;">Tell us what to add...</h3>
-              <div class="form-group">
-                <input type="text" class="form-control" name="link" placeholder="Youtube video link" value="" />
+              <div class="row d-flex flex-row align-items-center g-5">
+                <div class="col-9">
+                  <h3 class="text-light" style="font-family: 'Clash Display', sans-serif;">Tell us what to add...</h3>
+                  <div class="form-group">
+                    <input id="videoLink" type="text" class="form-control" name="link" placeholder="Youtube video link"
+                      value="" />
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="row mb-2">
+                    <input type="submit" class="btn rounded-5 px-3 btn-primary text-light" value="Save" />
+                  </div>
+                  <div class="row">
+                    <a class="btn rounded-5 px-3 btn-secondary text-light" style="font-weight: 600;"
+                    href="/buckets/{{bucket._id}}/details">Cancel</a>
+                  </div>
+                </div>
               </div>
-              <div class="d-flex flex-col justify-content-end">
-                <input type="submit" class="custom-btn m-0" value="Add to my collection" />
-                <a class="btn px-5 py-2 ms-2 rounded-5 btn-secondary text-light" style="font-weight: 600;" href="/buckets/{{_id}}/details">Cancel</a>
-              </div>
+
+              <!-- Add Video Button -->
+              <button id="addVideoButton" class="btn btn-warning my-3">Add Video</button>
+
+              <!-- Video Preview Container -->
+              <div id="videoPreviews" class="mb-4 row"></div>
+              <input type="hidden" id="videosData" name="videos">
+
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const videoLinkInput = document.getElementById("videoLink");
+      const videoPreviews = document.getElementById("videoPreviews");
+      const addVideoButton = document.getElementById("addVideoButton");
+      const videosForm = document.getElementById("videosForm");
+      const videosDataInput = document.getElementById("videosData");
+
+      addVideoButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        const videoLink = videoLinkInput.value;
+        if (videoLink) {
+          // Create a video preview element
+          const videoPreview = document.createElement("div");
+          videoPreview.className = "video-preview mb-2 col-md-4";
+          videoPreview.innerHTML = `
+        <img class="img me-3 rounded-1" style="width:100%;" data=${videoLink} src="http://img.youtube.com/vi/${extractVideoID(videoLink)}/mqdefault.jpg" alt="Thumbnail">
+        <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeVideoPreview(this)">Remove</button>
+      `;
+
+          // Append to previews container
+          videoPreviews.appendChild(videoPreview);
+
+          // Clear the input
+          videoLinkInput.value = "";
+        }
+      });
+
+      videosForm.addEventListener("submit", function () {
+        // Gather video URLs from the previews and store as JSON in hidden input
+        const videoPreviews = document.querySelectorAll(".video-preview img");
+        const videoURLs = Array.from(videoPreviews).map((iframe) => iframe.getAttribute('data'));
+        videosDataInput.value = JSON.stringify(videoURLs);
+      });
+    });
+
+    function removeVideoPreview(button) {
+      // Remove the video preview element
+      const videoPreview = button.closest(".video-preview");
+      videoPreview.remove();
+    }
+
+    function extractVideoID(videoURL) {
+      const urlParams = new URLSearchParams(new URL(videoURL).search);
+      return urlParams.get("v");
+    }
+
+
+  </script>
