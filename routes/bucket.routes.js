@@ -221,7 +221,8 @@ router.get('/:bucketId', (req, res) => {
     try {
         Bucket.findById(bucketId).populate('resources').populate('owner')
         .then(bucket => {
-            if (req.session.currentUser._id === bucket.owner._id.toString()) {
+            const currentUser = req.session.currentUser
+            if (currentUser && currentUser._id === bucket.owner._id.toString()) {
                 bucket['authentified'] = 'true'
             }
             res.render('buckets/bucket-details-view', {bucket, active:'buckets'})
