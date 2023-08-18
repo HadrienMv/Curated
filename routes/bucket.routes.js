@@ -5,6 +5,7 @@ const User = require('../models/User.model')
 const { isLoggedIn, isLoggedOut } = require('../middleware/route.guard');
 const { getMessage, isEmpty, isLink, getYouTubeEmbedUrl, getYouTubeThumbnailUrl, getYouTubeTitle} = require('./utils');
 const router = express.Router();
+const bucketTags = ['business', 'lifestyle', 'food', 'arts', 'music', 'health']
 
 //Display create form
 router.get("/create", isLoggedIn, async (req, res, next) => {
@@ -16,9 +17,8 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 
     const userId = getCurrentUser(req);
 
-    const { bucketName, bucketDescription, resourceLink} = req.body
+    const { bucketName, bucketDescription} = req.body
     
-    const bucketTags = ['business', 'lifestyle', 'food', 'arts', 'music', 'health']
     let myTags = []
     bucketTags.forEach(tag => {
         if (req.body[tag] != undefined) {
@@ -26,72 +26,86 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         }
     })
 
-    console.log(myTags)
-
-    if (isEmpty(bucketDescription) || isEmpty(bucketName) || isEmpty(resourceLink)) {
+    if (isEmpty(bucketDescription) || isEmpty(bucketName)) {
         const message = getMessage('None of the fields can be empty');
         res.render('buckets/new-bucket', { message })
     }
 
-    if (!isLink(resourceLink)) {
-        const message = getMessage('Invalid link');
-        res.render('buckets/new-bucket', { message })
-    }
-
     try {
-        let url = resourceLink;
-        url = getYouTubeEmbedUrl(resourceLink);
-        thumbnail = getYouTubeThumbnailUrl(resourceLink)
-        videoTitle = await getYouTubeTitle(resourceLink)
-        console.log('video title ', videoTitle); 
-
-        const newResource = await Resource.create({url, thumbnail, videoTitle});
-        const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, tags: myTags, resources: [newResource._id], owner: userId });
+        const newBucket = await Bucket.create({ name: bucketName, description: bucketDescription, tags: myTags, owner: userId });
         const myUser = await User.findByIdAndUpdate(userId, {$push : {"buckets": newBucket}}, {new: true})
         const userBuckets = await getAllUserBuckets(userId);
-        const message = getMessage(`${newBucket.name} created successfully`, 'success')
+        const message = getMessage(`"${newBucket.name}" collection created successfully`, 'success')
 
-        res.render('buckets/buckets', { message, buckets: userBuckets })
+        res.redirect(`/resources/${newBucket._id}/add`)
         
     } catch (error) {
         const message = getMessage(error);
-        res.render('buckets/new-bucket', { message })
+        console.log(message);
+        res.render('buckets/new-bucket')
     }
 });
 
 // Bucket details 
 router.get('/:bucketId/details', isLoggedIn, async (req, res) => {
     const { bucketId } = req.params
+
     try {
         const bucket = await Bucket.findById(bucketId).populate('resources').populate('owner');
-        
-        res.render('buckets/bucket-details', {bucket, active:'buckets'})
+
+        if (req.session.currentUser._id === bucket.owner._id.toString()) {
+            res.render('buckets/bucket-details', {bucket, active:'buckets'})
+        } else {
+            res.redirect('/feed/all')
+        }
     } catch (error) {
         const message = getMessage(error);
-        res.render('buckets/buckets', { message, active:'buckets'})
+        console.log(message)
+        res.render('buckets/buckets', { active:'buckets'})
     }
 })
 
 //Bucket edit page 
-router.get("/:bucketId/update", isLoggedIn, async (req, res) => {
+router.get("/:bucketId/update", isLoggedIn, (req, res) => {
     const {bucketId} = req.params;
 
     try{
-        const bucket = await Bucket.findById(bucketId);
-
-        res.render("buckets/edit-bucket", {bucket, active:'buckets'})
-    }catch(error){
+        Bucket.findById(bucketId).populate('resources')
+        .then(bucket => {
+            if (req.session.currentUser._id === bucket.owner._id.toString()) {
+                bucketTags.forEach(tag => {
+                    if (bucket.tags.includes(tag)) {
+                        bucket[tag] = 'checked'
+                    }
+                    else {
+                        bucket[tag] = ''
+                    }
+                })
+                bucket['videoCount'] = bucket.resources.length
+    
+                res.render("buckets/edit-bucket", {bucket, active:'buckets'})
+            } else {
+                res.redirect('/feed/all')
+            }
+        })
+    } catch(error){
         const message = getMessage(error);
-
-        res.render('buckets/bucket-details', {message, active:'buckets'})
+        console.log(message)
+        res.render('buckets/bucket-details', {active:'buckets'})
     }
 })
 
 //Handle updating bucket info
 router.post("/:bucketId/update", isLoggedIn, async (req, res) => {
-    const {bucketId} =  req.params 
-
+    const {bucketId} =  req.params
     const { name, description } = req.body
+
+    let myTags = []
+    bucketTags.forEach(tag => {
+        if (req.body[tag] != undefined) {
+            myTags.push(tag.toLowerCase())
+        }
+    })
 
     if (isEmpty(description) || isEmpty(name) ) {
         const message = getMessage('None of the fields can be empty');
@@ -100,13 +114,14 @@ router.post("/:bucketId/update", isLoggedIn, async (req, res) => {
     }
 
     try {
-        const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {name, description}, {new: true}).populate("resources");
-        const message = getMessage(`${updatedBucket.name} updated successfully`, 'success');
+        const updatedBucket = await Bucket.findByIdAndUpdate(bucketId, {name, description, tags: myTags}, {new: true}).populate("resources");
+        const message = getMessage(`"${updatedBucket.name}" collection updated successfully`, 'success');
 
         res.render('buckets/bucket-details', {bucket: updatedBucket, message, active:'buckets'})
     }catch(error){
         const message = getMessage(error);
-        res.render('buckets/edit-bucket', { bucket:{name, description, _id:bucketId}, message, active:'buckets'})
+        console.log(message)
+        res.render('buckets/edit-bucket', { bucket:{name, description, _id:bucketId}, active:'buckets'})
     }
 });
 
@@ -115,7 +130,8 @@ router.post("/:bucketId/update", isLoggedIn, async (req, res) => {
 router.post('/:bucketId/delete', isLoggedIn, async(req, res) => {
     const {bucketId} = req.params
 
-    const bucket = await Bucket.findById(bucketId).populate('resources');
+    const bucket = await Bucket.findById(bucketId).populate('resources').populate('owner');
+
     if (!bucket) {
       return res.redirect('/buckets');
     }
@@ -128,9 +144,10 @@ router.post('/:bucketId/delete', isLoggedIn, async(req, res) => {
         await Bucket.findByIdAndDelete(bucketId)
     
         res.redirect('/buckets/all');
-      } catch (err) {
+    } catch (err) {
         const message = getMessage(err);
-        res.render('buckets/bucket-details', { bucket, message, active:'buckets' });
+        console.log(message)
+        res.render('buckets/bucket-details', { bucket, active:'buckets' });
       }
     
 })
@@ -190,15 +207,21 @@ router.get('/:bucketId/downvote', isLoggedIn, async (req, res, next) => {
 })
 
 // Bucket details 
-router.get('/:bucketId', async (req, res) => {
+router.get('/:bucketId', (req, res) => {
     const { bucketId } = req.params
     try {
-        const bucket = await Bucket.findById(bucketId).populate('resources').populate('owner');
-        
-        res.render('buckets/bucket-details-view', {bucket, active:'buckets'})
+        Bucket.findById(bucketId).populate('resources').populate('owner')
+        .then(bucket => {
+            if (req.session.currentUser._id === bucket.owner._id.toString()) {
+                bucket['authentified'] = 'true'
+            }
+            res.render('buckets/bucket-details-view', {bucket, active:'buckets'})
+        })
+
     } catch (error) {
         const message = getMessage(error);
-        res.render('buckets/buckets', { message, active:'buckets'})
+        console.log(message);
+        res.render('buckets/buckets', { active:'buckets'})
     }
 })
 

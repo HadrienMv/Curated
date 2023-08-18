@@ -46,19 +46,59 @@
       </div>
     </div>
     <div class="col-4">
-      <div class="playlist-container px-3" id="playlist">
-        <div class="rounded-5 border shadow bg-dark d-flex flex-col justify-content-center">
-          <p class="p-2 text-light" style="font-family: 'Clash Display', sans-serif;">The collection</span></p>
-        </div> 
-        {{#each bucket.resources}}
-        <div class="additional-videos card playlist-item" style="width: 100%;" data-video-id="{{url}}">
-          <img class="img-fluid" src="{{thumbnail}}" alt="Thumbnail" style="border-radius: 10px; width: 100%;">
-          <div class="additional-content card-body">
-            <p class="card-title" style="font-size: 0.9em; font-weight: 600;">{{videoTitle}}</p>
+      <div class="row">
+        <div class="playlist-container px-3" id="playlist">
+          <div class="rounded-5 border shadow bg-dark d-flex flex-col justify-content-center">
+            <p class="p-2 text-light" style="font-family: 'Clash Display', sans-serif;">The collection</span></p>
+          </div> 
+          {{#each bucket.resources}}
+          <div class="additional-videos card playlist-item" style="width: 100%;" data-video-id="{{url}}">
+            <img class="img-fluid" src="{{thumbnail}}" alt="Thumbnail" style="border-radius: 10px; width: 100%;">
+            <div class="additional-content card-body">
+              <p class="card-title" style="font-size: 0.9em; font-weight: 600;">{{videoTitle}}</p>
+            </div>
           </div>
-        </div>
         {{/each}}
+        </div>
       </div>
+      {{#if bucket.authentified}}
+        <div class="row mt-4 justify-content-end">
+          <a class="btn px-3 py-2 rounded-2 btn-success text-light shadow" style="font-weight: 600; font-size: 0.85em; width: 50%;" href="/buckets/{{bucket._id}}/details">Update collection</a>
+        </div>
+      {{/if}}
     </div>
   </div>
 </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      const playlist = document.getElementById('playlist');
+      const videoContainer = document.querySelector('.video-container iframe');
+
+      // Get the URL of the first video in the playlist
+      const firstPlaylistItem = playlist.querySelector('.playlist-item');
+       firstPlaylistItem.classList.add('active')
+      const firstVideoId = firstPlaylistItem.getAttribute('data-video-id');
+      const firstVideoUrl = `${firstVideoId}`;
+
+      // Set the initial video URL
+      videoContainer.src = firstVideoUrl;
+
+
+      // Click event handler for playlist items
+      playlist.addEventListener('click', async function (event) {
+        const playlistItem = event.target.closest('.playlist-item');
+        if (playlistItem) {
+          const videoId = playlistItem.getAttribute('data-video-id');
+          videoContainer.src = `${videoId}`;
+
+          // Update active playlist item
+          const activeItem = playlist.querySelector('.playlist-item.active');
+          if (activeItem) {
+            activeItem.classList.remove('active');
+          }
+          playlistItem.classList.add('active');
+        }
+      });
+    });
+  </script>
