@@ -14,13 +14,15 @@
           <form id="videosForm" class="row register-form" method="post" action="/resources/{{bucket._id}}/add">
             <div class="col-md-12">
               <div class="row d-flex flex-col justify-content-between align-items-center mb-4">
-                {{#if bucket.resource}}
-                <img class="img me-3 rounded-1" style="height:50px;" src="{{bucket.resources.0.thumbnail}}" alt="">
-                {{/if}}
-                <h6 class="text-light pe-5" style="font-family: 'Clash Display', sans-serif; ">Collection : {{bucket.name}}</h6>
-                {{#if bucket.resource}}
-                <span class="badge bg-secondary" style="font-size: 0.75em;">{{bucket.videoCount}} VIDEO(S)</span>
-                {{/if}}
+                <div class="d-flex flex-col justify-content-start align-items-center">
+                  {{#if bucket.resources}}
+                  <img class="img me-3 rounded-1" style="height:50px;" src="{{bucket.resources.0.thumbnail}}" alt="">
+                  {{/if}}
+                  <h6 class="text-light pe-5" style="font-family: 'Clash Display', sans-serif; ">Collection : {{bucket.name}}</h6>
+                  {{#if bucket.resources}}
+                  <span class="badge bg-secondary" style="font-size: 0.75em;">{{bucket.videoCount}} VIDEO(S)</span>
+                  {{/if}}
+                </div>
               </div>
               <div class="row d-flex flex-row align-items-center g-5">
                 <div class="col-9">
